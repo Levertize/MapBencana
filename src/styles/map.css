@@ -157,6 +157,125 @@
   color: var(--color-primary-alt);
 }
 
+/* ---- Basemap Switcher ---- */
+.map-control-basemap-wrapper {
+  position: absolute;
+  bottom: 126px;
+  right: 10px;
+  z-index: var(--z-controls);
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.map-control-basemap {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(8px);
+}
+
+.map-control-basemap:hover,
+.map-control-basemap[aria-expanded="true"] {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color-hover);
+  color: var(--color-primary-alt);
+}
+
+.map-basemap-options {
+  display: flex;
+  gap: var(--space-2);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1-5);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(8px);
+  animation: slide-left var(--transition-fast) var(--transition-spring);
+}
+
+.map-basemap-options.hidden {
+  display: none;
+}
+
+.map-basemap-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+  width: 64px;
+}
+
+.map-basemap-option:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.map-basemap-option.active {
+  border-color: var(--color-primary);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--text-primary);
+}
+
+.map-basemap-option__thumbnail {
+  width: 48px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.map-basemap-option__thumbnail--dark {
+  background-color: #0b1121;
+  background-image: linear-gradient(135deg, #0b1121 0%, #1a2332 100%);
+}
+
+.map-basemap-option__thumbnail--standard {
+  background-color: #e4e2de;
+  background-image: linear-gradient(135deg, #aad3df 0%, #f2efe9 100%);
+}
+
+.map-basemap-option__thumbnail--satellite {
+  background-color: #052611;
+  background-image: linear-gradient(135deg, #0d381e 0%, #0c2b4e 100%);
+}
+
+.map-basemap-option__label {
+  font-size: 9px;
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  white-space: nowrap;
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* ---- Legend Bar ---- */
 .legend-bar {
   display: flex;
@@ -303,3 +422,48 @@
   background: rgba(220, 38, 38, 0.3) !important;
   border-color: var(--color-danger) !important;
 }
+
+/* ---- Earthquake Custom DivIcon Markers ---- */
+.earthquake-custom-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.earthquake-marker-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.earthquake-target {
+  position: absolute;
+  z-index: 2;
+  transition: transform var(--transition-fast);
+}
+
+.earthquake-marker-wrapper:hover .earthquake-target {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.earthquake-pulse {
+  position: absolute;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  animation: earthquake-pulse-anim 2.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes earthquake-pulse-anim {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+

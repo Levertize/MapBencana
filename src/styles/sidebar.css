@@ -213,18 +213,13 @@
 }
 
 .filter-checkbox__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 20px;
-  text-align: center;
-  font-size: var(--font-size-sm);
+  height: 20px;
   flex-shrink: 0;
 }
-
-.filter-checkbox__icon--gempa { color: var(--color-gempa); }
-.filter-checkbox__icon--gunung { color: var(--color-gunung); }
-.filter-checkbox__icon--banjir { color: var(--color-banjir); }
-.filter-checkbox__icon--longsor { color: var(--color-longsor); }
-.filter-checkbox__icon--kebakaran { color: var(--color-kebakaran); }
-.filter-checkbox__icon--tsunami { color: var(--color-tsunami); }
 
 .filter-checkbox__label {
   flex: 1;
@@ -432,10 +427,10 @@
     left: 0;
     right: 0;
     width: 100%;
-    height: auto;
+    height: 56px;
     flex-direction: row;
     justify-content: space-around;
-    padding: var(--space-2) 0;
+    align-items: center;
     border-right: none;
     border-top: 1px solid var(--border-color);
     z-index: var(--z-sidebar);
@@ -464,5 +459,9 @@
     bottom: 56px;
     width: 100%;
     max-width: 320px;
+  }
+
+  .map-container {
+    margin-bottom: 56px;
   }
 }

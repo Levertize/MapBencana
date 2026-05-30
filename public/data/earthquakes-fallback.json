@@ -1,0 +1,66 @@
+{
+  "Infogempa": {
+    "gempa": [
+      {
+        "Tanggal": "31 Mei 2026",
+        "Jam": "05:12:30 WIB",
+        "DateTime": "2026-05-30T22:12:30+00:00",
+        "Coordinates": "-8.45,115.12",
+        "Lintang": "8.45 LS",
+        "Bujur": "115.12 BT",
+        "Magnitude": "4.8",
+        "Kedalaman": "15 km",
+        "Wilayah": "Pusat gempa berada di darat 12 km barat daya Tabanan, Bali",
+        "Potensi": "Tidak berpotensi tsunami"
+      },
+      {
+        "Tanggal": "31 Mei 2026",
+        "Jam": "02:22:15 WIB",
+        "DateTime": "2026-05-30T19:22:15+00:00",
+        "Coordinates": "-1.25,136.18",
+        "Lintang": "1.25 LS",
+        "Bujur": "136.18 BT",
+        "Magnitude": "5.2",
+        "Kedalaman": "22 km",
+        "Wilayah": "Pusat gempa berada di laut 88 km timur laut Yapen, Papua",
+        "Potensi": "Tidak berpotensi tsunami"
+      },
+      {
+        "Tanggal": "30 Mei 2026",
+        "Jam": "23:45:00 WIB",
+        "DateTime": "2026-05-30T16:45:00+00:00",
+        "Coordinates": "-6.80,107.14",
+        "Lintang": "6.80 LS",
+        "Bujur": "107.14 BT",
+        "Magnitude": "3.5",
+        "Kedalaman": "10 km",
+        "Wilayah": "Pusat gempa berada di darat 8 km barat daya Cianjur, Jawa Barat",
+        "Potensi": "Tidak berpotensi tsunami"
+      },
+      {
+        "Tanggal": "30 Mei 2026",
+        "Jam": "18:30:12 WIB",
+        "DateTime": "2026-05-30T11:30:12+00:00",
+        "Coordinates": "2.11,98.92",
+        "Lintang": "2.11 LU",
+        "Bujur": "98.92 BT",
+        "Magnitude": "6.1",
+        "Kedalaman": "120 km",
+        "Wilayah": "Pusat gempa berada di darat 15 km barat daya Tapanuli Utara, Sumatera Utara",
+        "Potensi": "Tidak berpotensi tsunami"
+      },
+      {
+        "Tanggal": "30 Mei 2026",
+        "Jam": "10:15:00 WIB",
+        "DateTime": "2026-05-30T03:15:00+00:00",
+        "Coordinates": "-9.12,124.32",
+        "Lintang": "9.12 LS",
+        "Bujur": "124.32 BT",
+        "Magnitude": "7.2",
+        "Kedalaman": "80 km",
+        "Wilayah": "Pusat gempa berada di laut 102 km tenggara Timor Tengah Selatan, Nusa Tenggara Timur",
+        "Potensi": "Berpotensi tsunami"
+      }
+    ]
+  }
+}

@@ -159,42 +159,74 @@
               <label class="filter-checkbox">
                 <input type="checkbox" checked data-type="gempa" />
                 <span class="filter-checkbox__mark"></span>
-                <span class="filter-checkbox__icon filter-checkbox__icon--gempa">⊙</span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--gempa">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8" stroke="#EF4444" stroke-width="2.5" fill="none"/>
+                    <circle cx="12" cy="12" r="3" fill="#EF4444"/>
+                  </svg>
+                </span>
                 <span class="filter-checkbox__label">Gempa Bumi</span>
                 <span class="filter-checkbox__count" data-count="gempa">128</span>
               </label>
               <label class="filter-checkbox">
                 <input type="checkbox" checked data-type="gunung-berapi" />
                 <span class="filter-checkbox__mark"></span>
-                <span class="filter-checkbox__icon filter-checkbox__icon--gunung">△</span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--gunung">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 3L3 21h18L12 3z" fill="#F97316" opacity="0.85"/>
+                    <path d="M12 3L3 21h18L12 3z" stroke="#F97316" stroke-width="1.5" fill="none"/>
+                  </svg>
+                </span>
                 <span class="filter-checkbox__label">Gunung Berapi</span>
                 <span class="filter-checkbox__count" data-count="gunung-berapi">45</span>
               </label>
               <label class="filter-checkbox">
                 <input type="checkbox" checked data-type="banjir" />
                 <span class="filter-checkbox__mark"></span>
-                <span class="filter-checkbox__icon filter-checkbox__icon--banjir">◈</span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--banjir">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z" fill="#3B82F6" opacity="0.85"/>
+                    <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z" stroke="#3B82F6" stroke-width="1.5" fill="none"/>
+                  </svg>
+                </span>
                 <span class="filter-checkbox__label">Banjir</span>
                 <span class="filter-checkbox__count" data-count="banjir">72</span>
               </label>
               <label class="filter-checkbox">
                 <input type="checkbox" checked data-type="tanah-longsor" />
                 <span class="filter-checkbox__mark"></span>
-                <span class="filter-checkbox__icon filter-checkbox__icon--longsor">⚠</span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--longsor">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" fill="#FBBF24" opacity="0.85"/>
+                    <line x1="12" y1="9" x2="12" y2="14" stroke="#78350F" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="12" cy="17" r="1" fill="#78350F"/>
+                  </svg>
+                </span>
                 <span class="filter-checkbox__label">Tanah Longsor</span>
                 <span class="filter-checkbox__count" data-count="tanah-longsor">34</span>
               </label>
               <label class="filter-checkbox">
                 <input type="checkbox" data-type="kebakaran" />
                 <span class="filter-checkbox__mark"></span>
-                <span class="filter-checkbox__icon filter-checkbox__icon--kebakaran">🔥</span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--kebakaran">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 23c-3.866 0-7-2.686-7-6 0-2.5 1.5-4.5 3-6 .5-.5 1.5.5 1 1.5-.5 1 0 2.5 1.5 3 1.5.5 2-1 2-2 0-.5.5-1.5 1.5-2.5 2-2 3.5-3.5 3.5-6.5 0-1-0.5-2.5-1-3.5 1 1 4 5.5 4 9.5 0 3.314-3.134 6-7 6z" fill="#F59E0B" opacity="0.9"/>
+                    <path d="M12 23c-2 0-3.5-1.5-3.5-3.5 0-1.5 1-3 2-4 .3-.3.8.2.5.8-.3.5 0 1.2.8 1.5.7.3 1-.5 1-1 0-.3.3-.8.8-1.2 1-1 1.8-1.8 1.8-3.3 0-.5-.3-1.2-.5-1.8.5.5 2 2.8 2 4.8 0 1.657-1.567 3-3.5 3z" fill="#EF4444" opacity="0.7"/>
+                  </svg>
+                </span>
                 <span class="filter-checkbox__label">Kebakaran Hutan</span>
                 <span class="filter-checkbox__count" data-count="kebakaran">18</span>
               </label>
               <label class="filter-checkbox">
                 <input type="checkbox" data-type="tsunami" />
                 <span class="filter-checkbox__mark"></span>
-                <span class="filter-checkbox__icon filter-checkbox__icon--tsunami">🌊</span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--tsunami">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#06B6D4" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                    <path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#06B6D4" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
+                    <path d="M5 7c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0" stroke="#06B6D4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.3"/>
+                  </svg>
+                </span>
                 <span class="filter-checkbox__label">Tsunami</span>
                 <span class="filter-checkbox__count" data-count="tsunami">6</span>
               </label>
@@ -348,25 +380,41 @@
 
       <!-- Stats Panel (Right Sidebar) -->
       <aside class="stats-panel" id="stats-panel" aria-label="Ringkasan bencana">
-        <h2 class="stats-panel__title">RINGKASAN BENCANA</h2>
+        <div class="stats-panel__header">
+          <h2 class="stats-panel__title">RINGKASAN BENCANA</h2>
+          <button class="stats-panel__toggle" id="stats-panel-toggle" aria-label="Tutup panel statistik">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
 
         <!-- Total Kejadian -->
         <div class="stats-card stats-card--total" id="stats-total">
-          <span class="stats-card__label">Total Kejadian</span>
-          <span class="stats-card__value">297</span>
-          <span class="stats-card__change stats-card__change--up">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
-              <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/>
-            </svg>
-            12% dari 15 hari lalu
-          </span>
+          <div class="stats-card__info">
+            <span class="stats-card__label">Total Kejadian</span>
+            <span class="stats-card__value">297</span>
+            <span class="stats-card__change stats-card__change--up">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/>
+              </svg>
+              12% dari 15 hari lalu
+            </span>
+          </div>
+          <div class="stats-card__sparkline" id="total-sparkline"></div>
         </div>
 
         <!-- Stats Grid -->
         <div class="stats-grid" id="stats-grid">
           <div class="stats-mini stats-mini--gempa">
             <div class="stats-mini__header">
-              <span class="stats-mini__icon">⊙</span>
+              <span class="stats-mini__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8" stroke="#EF4444" stroke-width="2.5" fill="none"/>
+                  <circle cx="12" cy="12" r="3" fill="#EF4444"/>
+                </svg>
+              </span>
               <span class="stats-mini__label">Gempa Bumi</span>
             </div>
             <span class="stats-mini__value">128</span>
@@ -374,7 +422,12 @@
           </div>
           <div class="stats-mini stats-mini--gunung">
             <div class="stats-mini__header">
-              <span class="stats-mini__icon">△</span>
+              <span class="stats-mini__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3L3 21h18L12 3z" fill="#F97316" opacity="0.85"/>
+                  <path d="M12 3L3 21h18L12 3z" stroke="#F97316" stroke-width="1.5" fill="none"/>
+                </svg>
+              </span>
               <span class="stats-mini__label">Gunung Berapi</span>
             </div>
             <span class="stats-mini__value">45</span>
@@ -382,7 +435,11 @@
           </div>
           <div class="stats-mini stats-mini--banjir">
             <div class="stats-mini__header">
-              <span class="stats-mini__icon">◈</span>
+              <span class="stats-mini__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z" fill="#3B82F6" opacity="0.85"/>
+                </svg>
+              </span>
               <span class="stats-mini__label">Banjir</span>
             </div>
             <span class="stats-mini__value">72</span>
@@ -390,7 +447,13 @@
           </div>
           <div class="stats-mini stats-mini--longsor">
             <div class="stats-mini__header">
-              <span class="stats-mini__icon">⚠</span>
+              <span class="stats-mini__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" fill="#FBBF24" opacity="0.85"/>
+                  <line x1="12" y1="9" x2="12" y2="14" stroke="#78350F" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="12" cy="17" r="1" fill="#78350F"/>
+                </svg>
+              </span>
               <span class="stats-mini__label">Tanah Longsor</span>
             </div>
             <span class="stats-mini__value">34</span>
@@ -443,6 +506,68 @@
           <h3 class="trend-chart__title">Trend Kejadian (15 Hari)</h3>
           <div class="trend-chart__canvas" id="trend-chart-canvas">
             <!-- SVG chart will be rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="side-legend" id="side-legend">
+          <h3 class="side-legend__title">LEGEND</h3>
+          <div class="side-legend__items">
+            <div class="side-legend__item">
+              <span class="side-legend__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8" stroke="#EF4444" stroke-width="2.5" fill="none"/>
+                  <circle cx="12" cy="12" r="3" fill="#EF4444"/>
+                </svg>
+              </span>
+              <span class="side-legend__label">Gempa Bumi</span>
+            </div>
+            <div class="side-legend__item">
+              <span class="side-legend__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3L3 21h18L12 3z" fill="#F97316" opacity="0.85"/>
+                  <path d="M12 3L3 21h18L12 3z" stroke="#F97316" stroke-width="1.5" fill="none"/>
+                </svg>
+              </span>
+              <span class="side-legend__label">Gunung Berapi</span>
+            </div>
+            <div class="side-legend__item">
+              <span class="side-legend__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z" fill="#3B82F6" opacity="0.85"/>
+                </svg>
+              </span>
+              <span class="side-legend__label">Banjir</span>
+            </div>
+            <div class="side-legend__item">
+              <span class="side-legend__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" fill="#FBBF24" opacity="0.85"/>
+                  <line x1="12" y1="9" x2="12" y2="14" stroke="#78350F" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="12" cy="17" r="1" fill="#78350F"/>
+                </svg>
+              </span>
+              <span class="side-legend__label">Tanah Longsor</span>
+            </div>
+            <div class="side-legend__item">
+              <span class="side-legend__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 23c-3.866 0-7-2.686-7-6 0-2.5 1.5-4.5 3-6 .5-.5 1.5.5 1 1.5-.5 1 0 2.5 1.5 3 1.5.5 2-1 2-2 0-.5.5-1.5 1.5-2.5 2-2 3.5-3.5 3.5-6.5 0-1-0.5-2.5-1-3.5 1 1 4 5.5 4 9.5 0 3.314-3.134 6-7 6z" fill="#F59E0B" opacity="0.9"/>
+                  <path d="M12 23c-2 0-3.5-1.5-3.5-3.5 0-1.5 1-3 2-4 .3-.3.8.2.5.8-.3.5 0 1.2.8 1.5.7.3 1-.5 1-1 0-.3.3-.8.8-1.2 1-1 1.8-1.8 1.8-3.3 0-.5-.3-1.2-.5-1.8.5.5 2 2.8 2 4.8 0 1.657-1.567 3-3.5 3z" fill="#EF4444" opacity="0.7"/>
+                </svg>
+              </span>
+              <span class="side-legend__label">Kebakaran Hutan</span>
+            </div>
+            <div class="side-legend__item">
+              <span class="side-legend__icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#06B6D4" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                  <path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#06B6D4" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
+                  <path d="M5 7c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0" stroke="#06B6D4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.3"/>
+                </svg>
+              </span>
+              <span class="side-legend__label">Tsunami</span>
+            </div>
           </div>
         </div>
       </aside>

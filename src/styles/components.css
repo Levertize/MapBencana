@@ -215,11 +215,37 @@
   animation: slide-in-right var(--transition-slow) ease;
 }
 
+.stats-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-1);
+  flex-shrink: 0;
+}
+
 .stats-panel__title {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
   letter-spacing: 0.08em;
+}
+
+.stats-panel__toggle {
+  width: 28px;
+  height: 28px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.stats-panel__toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
 }
 
 /* ---- Stats Card (Total) ---- */
@@ -232,6 +258,7 @@
   flex-direction: column;
   gap: var(--space-1);
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .stats-card:hover {
@@ -242,19 +269,29 @@
 .stats-card--total {
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
 }
 
-.stats-card--total::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-warning), var(--color-primary));
-  background-size: 200% auto;
-  animation: shimmer 3s linear infinite;
+.stats-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
 }
+
+.stats-card__sparkline {
+  width: 90px;
+  height: 45px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 
 .stats-card__label {
   font-size: var(--font-size-sm);
@@ -291,6 +328,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 .stats-mini {
@@ -313,19 +351,7 @@
   box-shadow: var(--shadow-md);
 }
 
-.stats-mini::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-}
 
-.stats-mini--gempa::before { background: var(--color-gempa); }
-.stats-mini--gunung::before { background: var(--color-gunung); }
-.stats-mini--banjir::before { background: var(--color-banjir); }
-.stats-mini--longsor::before { background: var(--color-longsor); }
 
 .stats-mini__header {
   display: flex;
@@ -334,13 +360,13 @@
 }
 
 .stats-mini__icon {
-  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
-
-.stats-mini--gempa .stats-mini__icon { color: var(--color-gempa); }
-.stats-mini--gunung .stats-mini__icon { color: var(--color-gunung); }
-.stats-mini--banjir .stats-mini__icon { color: var(--color-banjir); }
-.stats-mini--longsor .stats-mini__icon { color: var(--color-longsor); }
 
 .stats-mini__label {
   font-size: var(--font-size-xs);
@@ -373,6 +399,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 .province-ranking__title {
@@ -434,6 +461,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 .trend-chart__title {
@@ -450,6 +478,58 @@
   padding: var(--space-3);
   position: relative;
   overflow: hidden;
+}
+
+/* ---- Side Legend (Right Panel) ---- */
+.side-legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.side-legend__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+}
+
+.side-legend__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.side-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: default;
+}
+
+.side-legend__item:hover {
+  background: var(--bg-tertiary);
+}
+
+.side-legend__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.side-legend__label {
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-normal);
 }
 
 /* ---- Popup Card ---- */
@@ -709,6 +789,10 @@
 
   .stats-panel.open {
     transform: translateX(0);
+  }
+
+  .stats-panel__toggle {
+    display: flex;
   }
 }
 
