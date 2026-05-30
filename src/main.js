@@ -12,7 +12,7 @@ import './styles/components.css';
 // ---- Import Modules ----
 import { initMap, flyToLocation } from './map/initMap.js';
 import { initSidebar, onFilterChange, getFilterState } from './ui/sidebar.js';
-import { initStatsPanel, updateStats } from './ui/statsPanel.js';
+import { initStatsPanel, updateStats, setEarthquakeData, showStatsLoading, showStatsError, setTheme } from './ui/statsPanel.js';
 import { initLegend } from './ui/legend.js';
 import { toastInfo, toastSuccess, toastWarning } from './ui/toast.js';
 import { fetchBMKGEarthquakes } from './data/fetchBMKG.js';
@@ -165,6 +165,151 @@ const calculateDynamicStats = (earthquakeData, activeTypes, timeRange) => {
  * Bootstrap aplikasi MapBencana
  * Menginisialisasi semua komponen secara berurutan
  */
+let pollingTimer = null;
+
+/**
+ * Memulai polling data gempa dari BMKG secara berkala
+ */
+const startLivePolling = () => {
+  const getInterval = () => {
+    return parseInt(localStorage.getItem('polling-interval'), 10) || 30000;
+  };
+
+  const tick = async () => {
+    try {
+      console.log('[main] Melakukan polling data BMKG...');
+      const freshData = await fetchBMKGEarthquakes();
+
+      if (freshData && freshData.length > 0) {
+        const newEarthquakes = freshData.filter((incoming) => {
+          return !earthquakeData.some((existing) => {
+            return existing.id === incoming.id;
+          });
+        });
+
+        if (newEarthquakes.length > 0) {
+          console.log(`[main] Ditemukan ${newEarthquakes.length} gempa baru dari polling.`);
+          earthquakeData = [...newEarthquakes, ...earthquakeData];
+
+          // Re-render layer
+          initEarthquakeLayer(earthquakeData);
+          updateHeatmap(getFilterState().types, getFilterState().timeRange);
+
+          // Update stats cache
+          setEarthquakeData(earthquakeData);
+
+          // Update views & stats
+          const currentFilter = getFilterState();
+          const newStats = calculateDynamicStats(earthquakeData, currentFilter.types, currentFilter.timeRange);
+          updateStats(newStats);
+          updateChoropleth(newStats.provinceCounts);
+
+          // Peringatkan jika notifikasi aktif
+          const notifsEnabled = localStorage.getItem('notifications-enabled') !== 'false';
+          if (notifsEnabled) {
+            newEarthquakes.forEach((eq) => {
+              toastWarning(`Gempa baru terdeteksi: M ${eq.magnitude} di ${eq.location}`, {
+                title: 'Peringatan Dini Gempa',
+                duration: 6000,
+              });
+            });
+            const primaryEq = newEarthquakes[0];
+            flyToLocation(primaryEq.lat, primaryEq.lng, 9);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[main] Polling error:', error);
+    }
+
+    pollingTimer = setTimeout(tick, getInterval());
+  };
+
+  if (pollingTimer) {
+    clearTimeout(pollingTimer);
+  }
+  pollingTimer = setTimeout(tick, getInterval());
+};
+
+/**
+ * Memuat data dan merender map layer
+ */
+const loadDataAndRender = async () => {
+  showStatsLoading();
+
+  const loadingEl = document.querySelector('.map-loading');
+  if (loadingEl) {
+    loadingEl.classList.remove('hidden');
+  }
+
+  try {
+    console.log('[main] Memuat data gempa bumi...');
+    earthquakeData = await fetchBMKGEarthquakes();
+
+    if (loadingEl) {
+      loadingEl.classList.add('hidden');
+    }
+
+    initEarthquakeLayer(earthquakeData);
+    initHeatmapLayer(earthquakeData);
+    await initChoroplethLayer();
+    await initVolcanoLayer();
+
+    setEarthquakeData(earthquakeData);
+
+    const initialFilter = getFilterState();
+    const initialStats = calculateDynamicStats(earthquakeData, initialFilter.types, initialFilter.timeRange);
+    updateStats(initialStats);
+    updateChoropleth(initialStats.provinceCounts);
+    updateHeatmap(initialFilter.types, initialFilter.timeRange);
+
+    setTimeout(() => {
+      animateStatsOnLoad();
+    }, 100);
+
+    onFilterChange((state) => {
+      updateEarthquakeMarkers(state.types, state.timeRange);
+      updateHeatmap(state.types, state.timeRange);
+
+      const newStats = calculateDynamicStats(earthquakeData, state.types, state.timeRange);
+      updateStats(newStats);
+      updateChoropleth(newStats.provinceCounts);
+
+      const availableLayers = ['heatmap', 'choropleth', 'province-border', 'district-border', 'volcanoes'];
+      availableLayers.forEach((layerId) => {
+        if (state.layers.includes(layerId)) {
+          if (layerId === 'district-border' && !getLayer('district-border')) {
+            loadDistrictBordersLazy();
+          } else {
+            showLayer(layerId);
+          }
+        } else {
+          hideLayer(layerId);
+        }
+      });
+    });
+
+    startLivePolling();
+
+  } catch (error) {
+    console.error('[main] Gagal memuat data:', error);
+    if (loadingEl) {
+      loadingEl.classList.add('hidden');
+    }
+    showStatsError(() => {
+      loadDataAndRender();
+    });
+    toastWarning('Gagal memuat data bencana. Silakan coba lagi.', {
+      title: 'Koneksi Bermasalah',
+      duration: 5000,
+    });
+  }
+};
+
+/**
+ * Bootstrap aplikasi MapBencana
+ * Menginisialisasi semua komponen secara berurutan
+ */
 const bootstrap = async () => {
   try {
     // 1. Init map
@@ -185,71 +330,33 @@ const bootstrap = async () => {
     // 5. Setup share button
     initShareButton();
 
-    // 6. Fetch data BMKG
-    console.log('[main] Memulai pembaruan data BMKG...');
-    earthquakeData = await fetchBMKGEarthquakes();
+    // 6. Theme initialization
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
 
-    // 7. Sembunyikan map loading overlay
-    const loadingEl = document.querySelector('.map-loading');
-    if (loadingEl) {
-      loadingEl.classList.add('hidden');
+    const btnNavbarTheme = document.getElementById('btn-theme-toggle');
+    if (btnNavbarTheme) {
+      btnNavbarTheme.addEventListener('click', () => {
+        const isCurrentDark = localStorage.getItem('theme') !== 'light';
+        setTheme(isCurrentDark ? 'light' : 'dark');
+      });
     }
 
-    // 8. Inisialisasi layer gempa bumi
-    initEarthquakeLayer(earthquakeData);
-
-    // Inisialisasi layer tambahan (Phase 3 & 4)
-    initHeatmapLayer(earthquakeData);
-    await initChoroplethLayer();
-    await initVolcanoLayer();
-
-    // 9. Update stats panel dengan data riil pertama kali
-    const initialFilter = getFilterState();
-    const initialStats = calculateDynamicStats(earthquakeData, initialFilter.types, initialFilter.timeRange);
-    updateStats(initialStats);
-    updateChoropleth(initialStats.provinceCounts);
-    updateHeatmap(initialFilter.types, initialFilter.timeRange);
-
-    // Memicu animasi angka stats panel menggunakan data riil
-    setTimeout(() => {
-      animateStatsOnLoad();
-    }, 100);
-
-    // 10. Register filter change handler
-    onFilterChange((state) => {
-      // Update layer peta
-      updateEarthquakeMarkers(state.types, state.timeRange);
-      updateHeatmap(state.types, state.timeRange);
-      
-      // Update stats panel
-      const newStats = calculateDynamicStats(earthquakeData, state.types, state.timeRange);
-      updateStats(newStats);
-      updateChoropleth(newStats.provinceCounts);
-
-      // Handle layer toggles
-      const availableLayers = ['heatmap', 'choropleth', 'province-border', 'district-border', 'volcanoes'];
-      availableLayers.forEach((layerId) => {
-        if (state.layers.includes(layerId)) {
-          if (layerId === 'district-border' && !getLayer('district-border')) {
-            // Lazy load district borders
-            loadDistrictBordersLazy();
-          } else {
-            showLayer(layerId);
-          }
-        } else {
-          hideLayer(layerId);
-        }
-      });
+    // Listen to polling settings change
+    window.addEventListener('settings:polling', () => {
+      startLivePolling();
     });
 
-    // 11. Show welcome toast
+    // 7. Load and render
+    await loadDataAndRender();
+
+    // Welcome toast
     setTimeout(() => {
       toastSuccess('MapBencana siap digunakan', {
         title: 'Selamat Datang',
         duration: 3000,
       });
     }, 1000);
-
 
   } catch (error) {
     console.error('[main] Bootstrap error:', error);

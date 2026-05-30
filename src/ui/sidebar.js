@@ -3,7 +3,7 @@
  * Mengelola icon navigation, filter panel, dan interaksi filter
  */
 
-import { toastInfo } from './toast.js';
+import { switchRightPanelView } from './statsPanel.js';
 
 /**
  * State aktif filter
@@ -57,7 +57,9 @@ export const getFilterState = () => ({
  */
 const notifyFilterChange = () => {
   const state = getFilterState();
-  filterCallbacks.forEach((cb) => cb(state));
+  filterCallbacks.forEach((cb) => {
+    cb(state);
+  });
 };
 
 /**
@@ -106,19 +108,11 @@ const handleViewSwitch = (view) => {
       filterPanel?.classList.toggle('open');
       statsPanel?.classList.remove('open');
       setActiveNavItem('peta');
-    } else if (view === 'statistik') {
-      const willOpen = !statsPanel?.classList.contains('open');
-      statsPanel?.classList.toggle('open');
-      filterPanel?.classList.remove('open');
-      setActiveNavItem(willOpen ? 'statistik' : 'peta');
     } else {
       filterPanel?.classList.remove('open');
-      statsPanel?.classList.remove('open');
+      statsPanel?.classList.add('open');
       setActiveNavItem(view);
-      toastInfo(`View ${view} belum diimplementasi`, {
-        title: 'Info',
-        duration: 2000,
-      });
+      switchRightPanelView(view);
     }
   } else {
     // Desktop behavior
@@ -126,13 +120,11 @@ const handleViewSwitch = (view) => {
     if (view === 'peta') {
       filterPanel?.classList.remove('hidden');
       statsPanel?.classList.remove('hidden');
+      switchRightPanelView('statistik');
     } else {
       filterPanel?.classList.add('hidden');
-      statsPanel?.classList.add('hidden');
-      toastInfo(`View ${view} belum diimplementasi`, {
-        title: 'Info',
-        duration: 2000,
-      });
+      statsPanel?.classList.remove('hidden');
+      switchRightPanelView(view);
     }
   }
 };

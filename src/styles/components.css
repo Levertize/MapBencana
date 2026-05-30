@@ -817,3 +817,339 @@
     bottom: 56px;
   }
 }
+
+/* ---- Right Panel View Container ---- */
+.stats-panel__view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  animation: fade-in var(--transition-fast) ease;
+}
+
+.stats-panel__view.hidden {
+  display: none !important;
+}
+
+/* ---- Shimmer Skeleton Loading ---- */
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-elevated) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: var(--radius-lg);
+}
+
+.skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.skeleton-card--total {
+  height: 75px;
+  width: 100%;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.skeleton-mini {
+  height: 60px;
+}
+
+.skeleton-list {
+  height: 150px;
+  width: 100%;
+}
+
+.skeleton-chart {
+  height: 100px;
+  width: 100%;
+}
+
+/* ---- Empty & Error States ---- */
+.empty-state, .error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  gap: var(--space-3);
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+}
+
+.error-state__msg {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+/* ---- Riwayat / History Page ---- */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.history-item {
+  padding: var(--space-3);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: all var(--transition-fast);
+}
+
+.history-item:hover {
+  border-color: var(--border-color-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.history-item__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.history-item__mag {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.mag-high {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.mag-low {
+  background: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.history-item__time {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.history-item__location {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  line-height: var(--line-height-normal);
+}
+
+.history-item__details {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+/* ---- Peringatan / Alerts Page ---- */
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.alert-card {
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: all var(--transition-fast);
+}
+
+.alert-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.alert-card--gempa {
+  background: rgba(239, 68, 68, 0.05);
+  border-left: 4px solid var(--color-danger);
+}
+
+.alert-card--siaga {
+  background: rgba(249, 115, 22, 0.05);
+  border-left: 4px solid var(--color-gunung);
+}
+
+.alert-card--awas {
+  background: rgba(239, 68, 68, 0.05);
+  border-left: 4px solid var(--color-danger);
+}
+
+.alert-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alert-card__badge {
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.alert-card--gempa .alert-card__badge {
+  color: var(--color-danger);
+}
+
+.alert-card--siaga .alert-card__badge {
+  color: var(--color-gunung);
+}
+
+.alert-card--awas .alert-card__badge {
+  color: var(--color-danger);
+}
+
+.alert-card__time, .alert-card__province {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.alert-card__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.alert-card__desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+.alert-card__details {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+/* ---- Pengaturan / Settings Page ---- */
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+}
+
+.settings-group__title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+/* ---- Tentang / About Page ---- */
+.about-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+}
+
+.about-card__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.about-card__logo h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.about-card__version {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.about-card__desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  text-align: justify;
+}
+
+.about-card__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.about-card__section h4 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.about-card__section p {
+  font-size: var(--font-size-xs);
+  color: var(--text-disabled);
+}
+
+.about-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: var(--space-2);
+}
+
+.about-card__list li {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.about-card__list strong {
+  color: var(--text-primary);
+  display: block;
+  font-size: var(--font-size-sm);
+}
+
+.about-card__list p {
+  margin-top: 1px;
+}

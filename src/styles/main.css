@@ -382,3 +382,50 @@ ul, ol {
   0% { transform: scale(0.5); opacity: 0.6; }
   100% { transform: scale(2.5); opacity: 0; }
 }
+
+/* ---- Light Theme Overrides ---- */
+html.light-theme {
+  --bg-primary: #F8FAFC;       /* Slate 50 */
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F1F5F9;      /* Slate 100 */
+  --bg-elevated: #E2E8F0;      /* Slate 200 */
+  --bg-overlay: rgba(255, 255, 255, 0.85);
+
+  --text-primary: #0F172A;     /* Slate 900 */
+  --text-secondary: #475569;   /* Slate 600 */
+  --text-disabled: #94A3B8;    /* Slate 400 */
+  --text-inverse: #FFFFFF;
+
+  --border-color: #E2E8F0;     /* Slate 200 */
+  --border-color-hover: #CBD5E1; /* Slate 300 */
+
+  --neutral-700: #E2E8F0;
+  --neutral-600: #CBD5E1;
+  --neutral-400: #64748B;
+}
+
+/* Light mode specific map controller & popup adjustments */
+html.light-theme .leaflet-popup-content-wrapper,
+html.light-theme .leaflet-popup-tip {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+html.light-theme .map-control-locate,
+html.light-theme .map-control-basemap,
+html.light-theme .map-basemap-options {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+html.light-theme .map-control-locate:hover,
+html.light-theme .map-control-basemap:hover {
+  background: var(--bg-tertiary) !important;
+}
+
+html.light-theme .map-basemap-option:hover {
+  background: var(--bg-tertiary) !important;
+}

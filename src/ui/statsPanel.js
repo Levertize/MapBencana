@@ -5,6 +5,7 @@
 
 import { formatNumber } from '../utils/formatter.js';
 import { zoomToProvince } from '../map/choropleth.js';
+import { switchTileLayer, flyToLocation } from '../map/initMap.js';
 
 /**
  * Data dummy statistik (akan diganti dengan data real di phase berikutnya)
@@ -29,6 +30,12 @@ const dummyStats = {
   trend: [8, 12, 15, 10, 18, 22, 14, 20, 25, 19, 28, 22, 30, 24, 26],
 };
 
+/** @type {object[]} Cache data gempa */
+let cachedEarthquakes = [];
+
+/** @type {object[]} Cache data gunung berapi */
+let cachedVolcanoes = [];
+
 /**
  * Inisialisasi stats panel
  */
@@ -36,6 +43,364 @@ export const initStatsPanel = () => {
   renderTotalSparkline();
   renderTrendChart();
   initStatsInteractions();
+  initSettings();
+  fetchVolcanoes();
+};
+
+/**
+ * Menyimpan data gempa ter-cache ke panel
+ * @param {object[]} data - Data gempa bumi ter-normalisasi
+ */
+export const setEarthquakeData = (data) => {
+  cachedEarthquakes = data;
+  const activeNavItem = document.querySelector('.icon-nav__item--active');
+  const activeView = activeNavItem ? activeNavItem.dataset.view : 'peta';
+  if (activeView === 'riwayat') {
+    renderHistoryList();
+  } else if (activeView === 'peringatan') {
+    renderAlertsList();
+  }
+};
+
+/**
+ * Mengambil data gunung berapi secara asinkronus
+ */
+const fetchVolcanoes = async () => {
+  try {
+    const response = await fetch('./data/volcanoes.json');
+    if (response.ok) {
+      cachedVolcanoes = await response.json();
+    }
+  } catch (error) {
+    console.error('[statsPanel] Gagal memuat data gunung berapi:', error);
+  }
+};
+
+/**
+ * Menampilkan skeleton shimmer loader di panel Ringkasan
+ */
+export const showStatsLoading = () => {
+  const container = document.getElementById('view-ringkasan');
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="skeleton-wrapper">
+      <div class="skeleton-card skeleton-card--total shimmer"></div>
+      <div class="skeleton-grid">
+        <div class="skeleton-mini shimmer"></div>
+        <div class="skeleton-mini shimmer"></div>
+        <div class="skeleton-mini shimmer"></div>
+        <div class="skeleton-mini shimmer"></div>
+      </div>
+      <div class="skeleton-list shimmer"></div>
+      <div class="skeleton-chart shimmer"></div>
+    </div>
+  `;
+};
+
+/**
+ * Menampilkan pesan error di panel Ringkasan dengan tombol coba lagi
+ * @param {Function} onRetry - Callback fungsi saat tombol ditekan
+ */
+export const showStatsError = (onRetry) => {
+  const container = document.getElementById('view-ringkasan');
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="error-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p class="error-state__msg">Gagal memuat data statistik.</p>
+      <button class="btn btn--primary btn--sm" id="btn-retry-stats">
+        Coba Lagi
+      </button>
+    </div>
+  `;
+
+  const btnRetry = document.getElementById('btn-retry-stats');
+  if (btnRetry && typeof onRetry === 'function') {
+    btnRetry.addEventListener('click', onRetry);
+  }
+};
+
+/**
+ * Berpindah sub-view di panel kanan
+ * @param {string} view - Kode view ('statistik', 'riwayat', etc)
+ */
+export const switchRightPanelView = (view) => {
+  const viewMap = {
+    statistik: 'view-ringkasan',
+    riwayat: 'view-riwayat',
+    peringatan: 'view-peringatan',
+    pengaturan: 'view-pengaturan',
+    tentang: 'view-tentang',
+  };
+
+  const targetId = viewMap[view] || 'view-ringkasan';
+
+  const views = document.querySelectorAll('.stats-panel__view');
+  views.forEach((v) => {
+    if (v.id === targetId) {
+      v.classList.remove('hidden');
+    } else {
+      v.classList.add('hidden');
+    }
+  });
+
+  const titleEl = document.getElementById('stats-panel-title');
+  if (titleEl) {
+    const titleMap = {
+      statistik: 'RINGKASAN BENCANA',
+      riwayat: 'RIWAYAT KEJADIAN',
+      peringatan: 'PERINGATAN DINI',
+      pengaturan: 'PENGATURAN',
+      tentang: 'TENTANG APLIKASI',
+    };
+    titleEl.textContent = titleMap[view] || 'RINGKASAN BENCANA';
+  }
+
+  if (view === 'riwayat') {
+    renderHistoryList();
+  } else if (view === 'peringatan') {
+    renderAlertsList();
+  }
+};
+
+/**
+ * Render daftar 15 gempa terbaru
+ */
+const renderHistoryList = () => {
+  const container = document.getElementById('history-list');
+  if (!container) {
+    return;
+  }
+
+  if (cachedEarthquakes.length === 0) {
+    container.innerHTML = `<div class="empty-state">Tidak ada data riwayat kejadian.</div>`;
+    return;
+  }
+
+  const latest15 = cachedEarthquakes.slice(0, 15);
+
+  container.innerHTML = latest15
+    .map((eq) => {
+      const magnitude = Number(eq.magnitude).toFixed(1);
+      const magClass = eq.magnitude >= 5.0 ? 'mag-high' : 'mag-low';
+      const dateStr = new Date(eq.time).toLocaleString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      return `
+        <div class="history-item">
+          <div class="history-item__header">
+            <span class="history-item__mag ${magClass}">M ${magnitude}</span>
+            <span class="history-item__time">${dateStr} WIB</span>
+          </div>
+          <div class="history-item__location">${eq.location}</div>
+          <div class="history-item__details">
+            <span class="history-item__depth">Kedalaman: ${eq.depth} km</span>
+            <span class="history-item__coords">${Number(eq.lat).toFixed(3)}, ${Number(eq.lng).toFixed(3)}</span>
+          </div>
+          <button class="btn btn--ghost btn--sm btn--full history-item__btn-fly" data-lat="${eq.lat}" data-lng="${eq.lng}">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+            </svg>
+            Fokus Lokasi
+          </button>
+        </div>
+      `;
+    })
+    .join('');
+
+  container.querySelectorAll('.history-item__btn-fly').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const lat = parseFloat(btn.dataset.lat);
+      const lng = parseFloat(btn.dataset.lng);
+      flyToLocation(lat, lng, 9);
+    });
+  });
+};
+
+/**
+ * Render peringatan dini gempa M5.0+ dan gunung api Siaga/Awas
+ */
+const renderAlertsList = () => {
+  const container = document.getElementById('alerts-list');
+  if (!container) {
+    return;
+  }
+
+  const eqAlerts = cachedEarthquakes.filter((eq) => {
+    return eq.magnitude >= 5.0;
+  });
+  const volcanoAlerts = cachedVolcanoes.filter((v) => {
+    return v.status === 'Siaga' || v.status === 'Awas';
+  });
+
+  if (eqAlerts.length === 0 && volcanoAlerts.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-disabled)" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
+        </svg>
+        <p>Tidak ada peringatan dini aktif saat ini.</p>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+
+  eqAlerts.forEach((eq) => {
+    const magnitude = Number(eq.magnitude).toFixed(1);
+    const dateStr = new Date(eq.time).toLocaleString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    html += `
+      <div class="alert-card alert-card--gempa">
+        <div class="alert-card__header">
+          <span class="alert-card__badge">GEMPA BUMI M5.0+</span>
+          <span class="alert-card__time">${dateStr} WIB</span>
+        </div>
+        <div class="alert-card__title">Kekuatan: M ${magnitude}</div>
+        <p class="alert-card__desc">${eq.location}</p>
+        <div class="alert-card__details">
+          <span>Kedalaman: ${eq.depth} km</span>
+        </div>
+        <button class="btn btn--secondary btn--sm btn--full alert-card__btn-fly" data-lat="${eq.lat}" data-lng="${eq.lng}">
+          Fokus Pusat Gempa
+        </button>
+      </div>
+    `;
+  });
+
+  volcanoAlerts.forEach((v) => {
+    const statusClass = v.status === 'Awas' ? 'alert-card--awas' : 'alert-card--siaga';
+    html += `
+      <div class="alert-card ${statusClass}">
+        <div class="alert-card__header">
+          <span class="alert-card__badge">GUNUNG BERAPI (${v.status.toUpperCase()})</span>
+          <span class="alert-card__province">${v.province}</span>
+        </div>
+        <div class="alert-card__title">${v.name}</div>
+        <p class="alert-card__desc">Tipe: ${v.type} | Ketinggian: ${v.elevation} mdpl</p>
+        <div class="alert-card__details">
+          <span>Letusan Terakhir: ${v.lastEruption}</span>
+        </div>
+        <button class="btn btn--secondary btn--sm btn--full alert-card__btn-fly" data-lat="${v.lat}" data-lng="${v.lng}">
+          Fokus Gunung Api
+        </button>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.alert-card__btn-fly').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const lat = parseFloat(btn.dataset.lat);
+      const lng = parseFloat(btn.dataset.lng);
+      flyToLocation(lat, lng, 9);
+    });
+  });
+};
+
+/**
+ * Mengubah tema aplikasi
+ * @param {string} theme - 'dark' | 'light'
+ */
+export const setTheme = (theme) => {
+  const html = document.documentElement;
+  const themeToggleNavbar = document.getElementById('btn-theme-toggle');
+  const themeToggleSettings = document.getElementById('settings-theme-toggle');
+
+  if (theme === 'dark') {
+    html.classList.remove('light-theme');
+    switchTileLayer('dark');
+    localStorage.setItem('theme', 'dark');
+    if (themeToggleSettings) {
+      themeToggleSettings.checked = true;
+    }
+    if (themeToggleNavbar) {
+      themeToggleNavbar.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+      `;
+    }
+  } else {
+    html.classList.add('light-theme');
+    switchTileLayer('standard');
+    localStorage.setItem('theme', 'light');
+    if (themeToggleSettings) {
+      themeToggleSettings.checked = false;
+    }
+    if (themeToggleNavbar) {
+      themeToggleNavbar.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      `;
+    }
+  }
+};
+
+/**
+ * Inisialisasi formulir pengaturan dan event listeners
+ */
+const initSettings = () => {
+  const themeToggle = document.getElementById('settings-theme-toggle');
+  const pollingSelect = document.getElementById('settings-polling-interval');
+  const notifToggle = document.getElementById('settings-notifications-toggle');
+
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  const currentInterval = localStorage.getItem('polling-interval') || '30000';
+  const notifsEnabled = localStorage.getItem('notifications-enabled') !== 'false';
+
+  if (themeToggle) {
+    themeToggle.checked = currentTheme === 'dark';
+    themeToggle.addEventListener('change', () => {
+      setTheme(themeToggle.checked ? 'dark' : 'light');
+    });
+  }
+
+  if (pollingSelect) {
+    pollingSelect.value = currentInterval;
+    pollingSelect.addEventListener('change', () => {
+      const interval = parseInt(pollingSelect.value, 10);
+      localStorage.setItem('polling-interval', interval);
+      window.dispatchEvent(new CustomEvent('settings:polling', { detail: interval }));
+    });
+  }
+
+  if (notifToggle) {
+    notifToggle.checked = notifsEnabled;
+    notifToggle.addEventListener('change', () => {
+      localStorage.setItem('notifications-enabled', notifToggle.checked);
+    });
+  }
 };
 
 /**
@@ -176,7 +541,7 @@ const renderTrendChart = (data = dummyStats.trend, xLabels = ['25 Mei', '1 Jun',
   const yLabels = [
     parseFloat(min.toFixed(1)),
     parseFloat(((min + max) / 2).toFixed(1)),
-    parseFloat(max.toFixed(1))
+    parseFloat(max.toFixed(1)),
   ];
 
   canvas.innerHTML = `
@@ -201,9 +566,9 @@ const renderTrendChart = (data = dummyStats.trend, xLabels = ['25 Mei', '1 Jun',
       <path d="${pathD}" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 
       <!-- Dots on all points like in UI.png -->
-      ${points.map((p) =>
-        `<circle cx="${p.x}" cy="${p.y}" r="3" fill="#EF4444" stroke="#0B1121" stroke-width="2"/>`
-      ).join('')}
+      ${points.map((p) => {
+        return `<circle cx="${p.x}" cy="${p.y}" r="3" fill="#EF4444" stroke="#0B1121" stroke-width="2"/>`;
+      }).join('')}
 
       <!-- Y-axis labels -->
       ${yLabels.map((val, i) => {
@@ -219,7 +584,6 @@ const renderTrendChart = (data = dummyStats.trend, xLabels = ['25 Mei', '1 Jun',
     </svg>
   `;
 };
-
 
 /**
  * Update mini stat cards
@@ -257,16 +621,16 @@ const updateProvinceRanking = (provinces) => {
   }
 
   list.innerHTML = provinces
-    .map(
-      (prov, i) => `
-    <li class="province-ranking__item">
-      <span class="province-ranking__rank">${i + 1}</span>
-      <span class="province-ranking__dot" style="background: ${prov.color};"></span>
-      <span class="province-ranking__name">${prov.name}</span>
-      <span class="province-ranking__count">${prov.count}</span>
-    </li>
-  `,
-    )
+    .map((prov, i) => {
+      return `
+        <li class="province-ranking__item">
+          <span class="province-ranking__rank">${i + 1}</span>
+          <span class="province-ranking__dot" style="background: ${prov.color};"></span>
+          <span class="province-ranking__name">${prov.name}</span>
+          <span class="province-ranking__count">${prov.count}</span>
+        </li>
+      `;
+    })
     .join('');
 };
 
