@@ -467,3 +467,26 @@
   }
 }
 
+/* ---- Volcano Custom Markers ---- */
+.volcano-custom-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.volcano-marker-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.volcano-marker-wrapper:hover {
+  transform: scale(1.25);
+  filter: drop-shadow(0 0 6px currentColor);
+  z-index: 1000 !important;
+}
+
+.volcano-svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
