@@ -24,21 +24,41 @@ let currentProvinceCounts = {};
  * @returns {string} Nama provinsi yang bersih/terstandarisasi
  */
 const normalizeGeoJSONProvince = (name) => {
-  if (!name) return '';
+  if (!name) {
+    return '';
+  }
   let n = name.toUpperCase().trim();
 
   // Bersihkan prefix umum
-  if (n.startsWith('PROVINSI ')) n = n.replace('PROVINSI ', '');
-  if (n.startsWith('PROV. ')) n = n.replace('PROV. ', '');
+  if (n.startsWith('PROVINSI ')) {
+    n = n.replace('PROVINSI ', '');
+  }
+  if (n.startsWith('PROV. ')) {
+    n = n.replace('PROV. ', '');
+  }
   
   // Mapping variasi nama khusus
-  if (n === 'PROBANTEN') return 'Banten';
-  if (n === 'DAERAH ISTIMEWA YOGYAKARTA' || n === 'YOGYAKARTA') return 'DI Yogyakarta';
-  if (n === 'DAERAH KHUSUS IBUKOTA JAKARTA' || n === 'JAKARTA' || n === 'DKI JAKARTA') return 'DKI Jakarta';
-  if (n === 'BANGKA BELITUNG' || n === 'KEPULAUAN BANGKA BELITUNG') return 'Kepulauan Bangka Belitung';
-  if (n === 'KEPULAUAN RIAU') return 'Kepulauan Riau';
-  if (n === 'IRIAN JAYA BARAT') return 'Papua Barat';
-  if (n === 'IRIAN JAYA TIMUR' || n === 'IRIAN JAYA' || n === 'IRIAN JAYA TENGAH') return 'Papua';
+  if (n === 'PROBANTEN') {
+    return 'Banten';
+  }
+  if (n === 'DAERAH ISTIMEWA YOGYAKARTA' || n === 'YOGYAKARTA') {
+    return 'DI Yogyakarta';
+  }
+  if (n === 'DAERAH KHUSUS IBUKOTA JAKARTA' || n === 'JAKARTA' || n === 'DKI JAKARTA') {
+    return 'DKI Jakarta';
+  }
+  if (n === 'BANGKA BELITUNG' || n === 'KEPULAUAN BANGKA BELITUNG') {
+    return 'Kepulauan Bangka Belitung';
+  }
+  if (n === 'KEPULAUAN RIAU') {
+    return 'Kepulauan Riau';
+  }
+  if (n === 'IRIAN JAYA BARAT') {
+    return 'Papua Barat';
+  }
+  if (n === 'IRIAN JAYA TIMUR' || n === 'IRIAN JAYA' || n === 'IRIAN JAYA TENGAH') {
+    return 'Papua';
+  }
   
   return n;
 };
@@ -203,7 +223,9 @@ export const zoomToProvince = (provinceName) => {
   let foundLayer = null;
 
   choroplethLayer.eachLayer((layer) => {
-    if (foundLayer) return;
+    if (foundLayer) {
+      return;
+    }
 
     const featName = layer.feature?.properties?.Propinsi || layer.feature?.properties?.state || '';
     const normalizedFeat = normalizeGeoJSONProvince(featName).toLowerCase();

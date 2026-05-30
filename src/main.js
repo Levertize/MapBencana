@@ -406,7 +406,9 @@ const CITIES_COORDINATES = {
  * @param {string} query - Query pencarian
  */
 const executeSearch = (query) => {
-  if (!query) return;
+  if (!query) {
+    return;
+  }
   const q = query.trim().toLowerCase();
 
   // 1. Coba cari di daftar provinsi
@@ -490,7 +492,9 @@ const loadDistrictBordersLazy = () => {
 
   fetch('https://raw.githubusercontent.com/rifani/geojson-political-indonesia/master/IDN_adm_2_kabkota.json')
     .then((res) => {
-      if (!res.ok) throw new Error('Network response was not ok');
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
       return res.json();
     })
     .then((data) => {

@@ -6,9 +6,9 @@
 
 ---
 
-## 📅 Last Updated: 31 Mei 2026, 06:30 WIB
+## 📅 Last Updated: 31 Mei 2026, 06:38 WIB
 
-## 🏁 Status Proyek: Phase 2 SELESAI
+## 🏁 Status Proyek: Phase 4 SELESAI
 
 ---
 
@@ -40,20 +40,36 @@ Seluruh UI shell sudah dibangun sesuai desain `UI.png` (dark theme).
 - [x] Hubungkan filter checkboxes & dropdown waktu dari sidebar untuk menyaring marker & memperbarui statistik secara real-time
 - [x] Hitung statistik dinamis di stats panel kanan (total counter, breakdown, dan provinsi terdampak teraktif) dari data riil terfilter
 
+### Phase 3 — UI & Filter (Koneksi Data Peta) ✅ COMPLETE
+- [x] Layer toggle → hubungkan layer checkbox ke peta (`heatmap`, `choropleth`, `province-border`, `district-border`, `volcanoes`)
+- [x] Search lokasi → cari kota/provinsi/lokasi gempa terdekat → fly to koordinat
+- [x] Sambungkan toggle layer gunung berapi ke marker (statis dari `volcanoes.json`) dengan custom SVG triangle marker
+- [x] Interaktivitas zoom to province ketika mengklik list item provinsi teraktif di stats panel kanan (menggunakan event delegation)
+
+### Phase 4 — Layer Tambahan (Choropleth & Heatmap) ✅ COMPLETE
+- [x] Load GeoJSON batas provinsi (`indonesia-provinces.geojson` ~184 KB disimpan lokal)
+- [x] Render choropleth provinsi berdasarkan jumlah kejadian bencana dengan interaksi hover highlights & tooltip info
+- [x] Integrasikan `leaflet.heat` untuk heatmap mode density gempa bumi
+- [x] Lazy loading batas kabupaten/kota (`IDN_adm_2_kabkota.json` ~2.9 MB dari CDN) secara on-demand saat diaktifkan
+
 #### Files yang sudah dibuat/diubah:
 
 | File | Status | Deskripsi |
 |---|---|---|
 | `index.html` | ✅ | Layout utama: navbar, icon sidebar, filter panel, map, stats panel, legend, toast |
-| `src/main.js` | ✅ | Entry point — inisialisasi modul, trigger fetch BMKG, re-kalkulasi statistik dinamis, dan sinkronisasi filter event |
-| `src/data/fetchBMKG.js` | [NEW] | Fetcher BMKG dengan timeout (AbortController), retry (3x), dan local fallback |
-| `src/data/parser.js` | [NEW] | Normalisasi data gempa BMKG, parser tanggal Indonesia, dan ekstraksi nama provinsi dari deskripsi wilayah |
-| `src/map/earthquakeLayer.js` | [NEW] | Layer cluster marker Leaflet, target konsentris SVG kustom, dan logika penyaringan berbasis waktu/tipe |
-| `public/data/earthquakes-fallback.json` | [NEW] | Snapshot data cadangan untuk penanganan server BMKG offline |
+| `src/main.js` | 🔄 | Entry point — integrasikan inisialisasi search, dynamic layer management, dan lazy loading |
+| `src/data/fetchBMKG.js` | ✅ | Fetcher BMKG dengan timeout (AbortController), retry (3x), dan local fallback |
+| `src/data/parser.js` | 🔄 | Normalisasi data gempa BMKG, parser tanggal Indonesia, dan ekspor konstanta PROVINCES |
+| `src/map/earthquakeLayer.js` | ✅ | Layer cluster marker Leaflet, target konsentris SVG kustom, dan logika penyaringan berbasis waktu/tipe |
+| `src/map/volcanoLayer.js` | [NEW] | Layer gunung berapi kustom berbentuk segitiga SVG dan binding popup detail gunung aktif |
+| `src/map/choropleth.js` | [NEW] | Layer choropleth provinsi dari GeoJSON, outline administratif, hover tooltips, dan zoomToProvince helper |
+| `src/map/heatmap.js` | [NEW] | Layer heatmap kepadatan gempa terintegrasi via leaflet.heat |
+| `public/data/indonesia-provinces.geojson` | [NEW] | GeoJSON batas provinsi Indonesia yang disederhanakan |
+| `public/data/earthquakes-fallback.json` | ✅ | Snapshot data cadangan untuk penanganan server BMKG offline |
 | `src/map/initMap.js` | ✅ | Leaflet map — dark tile, zoom control, scale bar, locate button, basemap switcher control |
 | `src/map/layers.js` | ✅ | Layer management — register, show, hide, toggle API |
 | `src/ui/sidebar.js` | ✅ | Filter panel, time range dropdown, layer toggles, reset filter, mobile sidebar toggles |
-| `src/ui/statsPanel.js` | ✅ | Stats panel kanan — total counter, 4 mini cards, ranking provinsi, dan rendering trend chart (bezier curve) dengan sumbu X & Y dinamis |
+| `src/ui/statsPanel.js` | 🔄 | Gunakan event delegation untuk mengaktifkan zoom to province saat item list diklik |
 | `src/ui/legend.js` | ✅ | Legend bar (bottom map) — choropleth & disaster mode switching |
 | `src/ui/popup.js` | ✅ | Popup templates — earthquake & volcano cards dengan formatted details |
 | `src/ui/toast.js` | ✅ | Toast notification — success/error/warning/info, auto-dismiss, animations |
@@ -61,7 +77,7 @@ Seluruh UI shell sudah dibangun sesuai desain `UI.png` (dark theme).
 | `src/utils/colorScale.js` | ✅ | Choropleth color, magnitude style, color interpolation |
 | `src/utils/formatter.js` | ✅ | Format angka (ID), tanggal, koordinat, magnitude, depth, time ago, percent change |
 | `src/styles/main.css` | ✅ | Design system — CSS custom properties, fonts, layout, reset, typography |
-| `src/styles/map.css` | ✅ | Map container, Leaflet controls dark mode, legend bar, target konsentris & pulse styles |
+| `src/styles/map.css` | 🔄 | Kustomisasi styling untuk marker gunung berapi segitiga SVG, custom map tooltips, dan hover transitions |
 | `src/styles/components.css` | ✅ | Buttons, badges, search, stats cards (flat style), province ranking, trend chart |
 | `public/data/volcanoes.json` | ✅ | Sample data 12 gunung berapi aktif Indonesia |
 
@@ -71,8 +87,9 @@ Seluruh UI shell sudah dibangun sesuai desain `UI.png` (dark theme).
 - 🧭 Icon sidebar (6 nav: Peta, Statistik, Riwayat, Peringatan, Pengaturan, Tentang) — active state
 - 🧭 Mobile view (<= 768px) Bottom Navigation Bar + mobile-friendly panel toggles (slide-in) dan sinkronisasi navigasi otomatis
 - 🔍 Filter checkboxes (6 jenis bencana) — SVG icons berwarna, toggle on/off
+- 🔍 Kolom Pencarian (Search Bar) - Mendukung navigasi otomatis dan fly-to untuk nama provinsi, kota besar, dan wilayah gempa terbaru
 - ⏱️ Rentang waktu dropdown (Hari Ini / 7 / 15 / 30 hari)
-- 🔄 Layer toggles (Heatmap, Choropleth, Batas Provinsi/Kabupaten, Gunung Berapi)
+- 🔄 Layer toggles (Heatmap, Choropleth, Batas Provinsi/Kabupaten, Gunung Berapi) dengan lazy loading untuk Batas Kabupaten
 - 📊 Stats panel — animated number counter, mini cards, province ranking, SVG trend chart
 - 📜 Legend bar (bottom) — choropleth color scale
 - 📜 Side legend (right panel) — 6 jenis bencana dengan SVG icons
@@ -85,17 +102,7 @@ Seluruh UI shell sudah dibangun sesuai desain `UI.png` (dark theme).
 
 ## 🔴 Yang BELUM Dikerjakan (Next Steps)
 
-### Phase 3 — UI & Filter (Koneksi Data Peta) ⬅️ NEXT PRIORITY
-- [ ] Layer toggle → hubungkan layer checkbox (Heatmap, Choropleth, dll) ke peta
-- [ ] Search lokasi → cari kota/provinsi → fly to lokasi koordinat
-- [ ] Sambungkan toggle layer gunung berapi ke marker (statis dari `volcanoes.json`)
-
-### Phase 4 — Layer Tambahan (Choropleth & Heatmap)
-- [ ] Load GeoJSON batas provinsi (dari superpikar/indonesia-geojson)
-- [ ] Render choropleth berdasarkan jumlah kejadian bencana
-- [ ] Integrasikan `leaflet.heat` untuk heatmap mode
-
-### Phase 5 — Stats & Polish
+### Phase 5 — Stats & Polish ⬅️ NEXT PRIORITY
 - [ ] Dark/light mode switcher untuk peta dasar
 - [ ] Loading skeleton & error states pada chart/list
 - [ ] Animasi marker saat data real-time masuk
