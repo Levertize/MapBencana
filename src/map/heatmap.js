@@ -33,7 +33,8 @@ export const initHeatmapLayer = (earthquakeData) => {
       0.4: '#3B82F6', // Blue
       0.6: '#06B6D4', // Cyan
       0.7: '#10B981', // Emerald
-      0.8: '#F59E0B', // Amber
+      0.8: '#FBBF24', // Yellow
+      0.9: '#F97316', // Orange
       1.0: '#EF4444', // Red
     },
   });
@@ -65,8 +66,8 @@ export const updateHeatmap = (activeTypes, timeRange) => {
   const points = allEarthquakes
     .filter((g) => new Date(g.time) >= limitDate)
     .map((g) => {
-      // Normalisasi intensitas berbasis magnitudo untuk input heatmap (lat, lng, intensity)
-      const intensity = Math.max(0.1, Math.min(1.0, (g.magnitude - 2) / 6));
+      // Normalisasi intensitas berbasis magnitudo untuk input heatmap (lebih sensitif agar warna lebih terlihat)
+      const intensity = Math.max(0.4, Math.min(1.0, (g.magnitude - 2) / 4));
       return [g.lat, g.lng, intensity];
     });
 
