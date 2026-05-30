@@ -1,0 +1,468 @@
+/* ============================================================
+   MapBencana — Sidebar Styles (sidebar.css)
+   Icon navigation, filter panel, checkboxes, toggles
+   ============================================================ */
+
+/* ---- Icon Navigation (Left Vertical Bar) ---- */
+.icon-nav {
+  width: var(--icon-nav-width);
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-3) 0;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  z-index: var(--z-sidebar);
+}
+
+.icon-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  position: relative;
+  gap: 2px;
+}
+
+.icon-nav__item:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.icon-nav__item--active {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.icon-nav__item--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 24px;
+  background: var(--color-primary);
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+}
+
+.icon-nav__label {
+  font-size: 9px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ---- Filter Panel (Left Sidebar) ---- */
+.filter-panel {
+  width: var(--filter-panel-width);
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: var(--z-sidebar);
+  animation: slide-in-left var(--transition-slow) ease;
+}
+
+.filter-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.filter-panel__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+}
+
+.filter-panel__toggle {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.filter-panel__toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.filter-panel__toggle.collapsed {
+  transform: rotate(180deg);
+}
+
+.filter-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.filter-panel__body.collapsed {
+  display: none;
+}
+
+/* ---- Filter Sections ---- */
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.filter-section__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ---- Filter Checkboxes ---- */
+.filter-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  position: relative;
+}
+
+.filter-checkbox:hover {
+  background: var(--bg-tertiary);
+}
+
+/* Hide native checkbox */
+.filter-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Custom checkbox mark */
+.filter-checkbox__mark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--neutral-600);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.filter-checkbox__mark::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all var(--transition-spring);
+}
+
+/* Checked state */
+.filter-checkbox input:checked ~ .filter-checkbox__mark {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+}
+
+.filter-checkbox input:checked ~ .filter-checkbox__mark::after {
+  opacity: 1;
+  transform: scale(1);
+  background: white;
+  /* Checkmark shape */
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  border-radius: 0;
+  transform: rotate(45deg) scale(1);
+  margin-top: -2px;
+}
+
+.filter-checkbox__icon {
+  width: 20px;
+  text-align: center;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.filter-checkbox__icon--gempa { color: var(--color-gempa); }
+.filter-checkbox__icon--gunung { color: var(--color-gunung); }
+.filter-checkbox__icon--banjir { color: var(--color-banjir); }
+.filter-checkbox__icon--longsor { color: var(--color-longsor); }
+.filter-checkbox__icon--kebakaran { color: var(--color-kebakaran); }
+.filter-checkbox__icon--tsunami { color: var(--color-tsunami); }
+
+.filter-checkbox__label {
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+.filter-checkbox__count {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* ---- Filter Select (Dropdown) ---- */
+.filter-select-wrapper {
+  position: relative;
+}
+
+.filter-select-wrapper::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--text-secondary);
+  pointer-events: none;
+}
+
+.filter-select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  padding-right: var(--space-8);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: all var(--transition-fast);
+}
+
+.filter-select:hover {
+  border-color: var(--border-color-hover);
+}
+
+.filter-select:focus {
+  border-color: var(--border-color-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.filter-select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  padding: var(--space-2);
+}
+
+/* ---- Date Range ---- */
+.filter-date-range {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-2);
+}
+
+.filter-date-range__text {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.filter-date-range__btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.filter-date-range__btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+/* ---- Layer Toggles ---- */
+.layer-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.layer-toggle:hover {
+  background: var(--bg-tertiary);
+}
+
+.layer-toggle__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+.layer-toggle__info svg {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* ---- Toggle Switch ---- */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch__slider {
+  position: absolute;
+  inset: 0;
+  background: var(--neutral-700);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+.toggle-switch__slider::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  background: var(--neutral-400);
+  border-radius: 50%;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.toggle-switch input:checked + .toggle-switch__slider {
+  background: var(--color-primary);
+}
+
+.toggle-switch input:checked + .toggle-switch__slider::before {
+  transform: translateX(18px);
+  background: white;
+}
+
+.toggle-switch input:focus-visible + .toggle-switch__slider {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* ---- Responsive: Collapse sidebar on small screens ---- */
+@media (max-width: 1024px) {
+  .filter-panel {
+    position: absolute;
+    left: var(--icon-nav-width);
+    top: 0;
+    bottom: 0;
+    z-index: calc(var(--z-sidebar) + 1);
+    box-shadow: var(--shadow-xl);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+  }
+
+  .filter-panel.open {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .icon-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: var(--space-2) 0;
+    border-right: none;
+    border-top: 1px solid var(--border-color);
+    z-index: var(--z-sidebar);
+  }
+
+  .icon-nav__item {
+    width: auto;
+    height: auto;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .icon-nav__item--active::before {
+    left: 50%;
+    top: 0;
+    bottom: auto;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    border-radius: 0 0 var(--radius-full) var(--radius-full);
+  }
+
+  .filter-panel {
+    position: fixed;
+    left: 0;
+    top: var(--navbar-height);
+    bottom: 56px;
+    width: 100%;
+    max-width: 320px;
+  }
+}
