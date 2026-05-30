@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MapBencana — Peta interaktif rawan bencana Indonesia. Visualisasi data gempa, gunung berapi, banjir, dan bencana alam lainnya secara real-time." />
+  <meta name="keywords" content="peta bencana, Indonesia, gempa bumi, BMKG, gunung berapi, banjir, GIS" />
+  <title>MapBencana — Peta Rawan Bencana Indonesia</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <!-- App Entry -->
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- ===== TOP NAVBAR ===== -->
+    <header class="navbar" id="navbar">
+      <div class="navbar__left">
+        <div class="navbar__logo" id="logo">
+          <div class="navbar__logo-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <path d="M16 2L4 28h24L16 2z" fill="#EF4444" opacity="0.9"/>
+              <path d="M16 10l-1.5 12h3L16 10z" fill="#fff"/>
+              <circle cx="16" cy="25" r="1.5" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="navbar__logo-text">
+            <span class="navbar__title">MapBencana</span>
+            <span class="navbar__subtitle">Peta Rawan Bencana Indonesia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="navbar__center">
+        <div class="search-bar" id="search-bar">
+          <svg class="search-bar__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            class="search-bar__input"
+            id="search-input"
+            placeholder="Cari kota / provinsi / lokasi..."
+            aria-label="Cari lokasi di peta"
+          />
+          <kbd class="search-bar__shortcut">⌘K</kbd>
+        </div>
+      </div>
+
+      <div class="navbar__right">
+        <button class="btn btn--ghost" id="btn-share" aria-label="Bagikan peta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+            <polyline points="16,6 12,2 8,6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+          <span>Bagikan</span>
+        </button>
+
+        <button class="btn btn--icon" id="btn-theme-toggle" aria-label="Toggle dark/light mode">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
+
+        <div class="navbar__status">
+          <span class="navbar__time" id="navbar-time">Update: --:--:-- WIB</span>
+          <span class="badge badge--live" id="badge-live">
+            <span class="badge__dot"></span>
+            LIVE
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="layout" id="layout">
+      <!-- Icon Sidebar Navigation -->
+      <nav class="icon-nav" id="icon-nav" aria-label="Navigasi utama">
+        <button class="icon-nav__item icon-nav__item--active" data-view="peta" aria-label="Peta" aria-current="page">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2"/>
+            <line x1="8" y1="2" x2="8" y2="18"/>
+            <line x1="16" y1="6" x2="16" y2="22"/>
+          </svg>
+          <span class="icon-nav__label">Peta</span>
+        </button>
+
+        <button class="icon-nav__item" data-view="statistik" aria-label="Statistik">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span class="icon-nav__label">Statistik</span>
+        </button>
+
+        <button class="icon-nav__item" data-view="riwayat" aria-label="Riwayat">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          <span class="icon-nav__label">Riwayat</span>
+        </button>
+
+        <button class="icon-nav__item" data-view="peringatan" aria-label="Peringatan">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span class="icon-nav__label">Peringatan</span>
+        </button>
+
+        <button class="icon-nav__item" data-view="pengaturan" aria-label="Pengaturan">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+          <span class="icon-nav__label">Pengaturan</span>
+        </button>
+
+        <button class="icon-nav__item" data-view="tentang" aria-label="Tentang">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <span class="icon-nav__label">Tentang</span>
+        </button>
+      </nav>
+
+      <!-- Filter & Layer Panel (Left Sidebar) -->
+      <aside class="filter-panel" id="filter-panel" aria-label="Filter dan Layer">
+        <div class="filter-panel__header">
+          <h2 class="filter-panel__title">FILTER & LAYER</h2>
+          <button class="filter-panel__toggle" id="filter-panel-toggle" aria-label="Tutup panel filter">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="18,15 12,9 6,15"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="filter-panel__body" id="filter-panel-body">
+          <!-- Jenis Bencana -->
+          <section class="filter-section">
+            <h3 class="filter-section__title">Jenis Bencana</h3>
+            <div class="filter-checkboxes" id="filter-disaster-types">
+              <label class="filter-checkbox">
+                <input type="checkbox" checked data-type="gempa" />
+                <span class="filter-checkbox__mark"></span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--gempa">⊙</span>
+                <span class="filter-checkbox__label">Gempa Bumi</span>
+                <span class="filter-checkbox__count" data-count="gempa">128</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" checked data-type="gunung-berapi" />
+                <span class="filter-checkbox__mark"></span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--gunung">△</span>
+                <span class="filter-checkbox__label">Gunung Berapi</span>
+                <span class="filter-checkbox__count" data-count="gunung-berapi">45</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" checked data-type="banjir" />
+                <span class="filter-checkbox__mark"></span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--banjir">◈</span>
+                <span class="filter-checkbox__label">Banjir</span>
+                <span class="filter-checkbox__count" data-count="banjir">72</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" checked data-type="tanah-longsor" />
+                <span class="filter-checkbox__mark"></span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--longsor">⚠</span>
+                <span class="filter-checkbox__label">Tanah Longsor</span>
+                <span class="filter-checkbox__count" data-count="tanah-longsor">34</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" data-type="kebakaran" />
+                <span class="filter-checkbox__mark"></span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--kebakaran">🔥</span>
+                <span class="filter-checkbox__label">Kebakaran Hutan</span>
+                <span class="filter-checkbox__count" data-count="kebakaran">18</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" data-type="tsunami" />
+                <span class="filter-checkbox__mark"></span>
+                <span class="filter-checkbox__icon filter-checkbox__icon--tsunami">🌊</span>
+                <span class="filter-checkbox__label">Tsunami</span>
+                <span class="filter-checkbox__count" data-count="tsunami">6</span>
+              </label>
+            </div>
+          </section>
+
+          <!-- Rentang Waktu -->
+          <section class="filter-section">
+            <h3 class="filter-section__title">Rentang Waktu</h3>
+            <div class="filter-select-wrapper">
+              <select class="filter-select" id="filter-time-range" aria-label="Pilih rentang waktu">
+                <option value="1">Hari Ini</option>
+                <option value="7">7 Hari Terakhir</option>
+                <option value="15" selected>15 Hari Terakhir</option>
+                <option value="30">30 Hari Terakhir</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <div class="filter-date-range" id="filter-date-range">
+              <span class="filter-date-range__text">25 Mei 2025 - 8 Jun 2025</span>
+              <button class="filter-date-range__btn" aria-label="Pilih tanggal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </button>
+            </div>
+          </section>
+
+          <!-- Layer Peta -->
+          <section class="filter-section">
+            <h3 class="filter-section__title">Layer Peta</h3>
+            <div class="layer-toggles" id="layer-toggles">
+              <div class="layer-toggle">
+                <div class="layer-toggle__info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" opacity="0.5"/>
+                    <circle cx="12" cy="12" r="6" opacity="0.3"/>
+                    <circle cx="12" cy="12" r="2"/>
+                  </svg>
+                  <span>Heatmap</span>
+                </div>
+                <label class="toggle-switch" aria-label="Toggle heatmap">
+                  <input type="checkbox" data-layer="heatmap" />
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+
+              <div class="layer-toggle">
+                <div class="layer-toggle__info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path d="M3 9h18M9 3v18"/>
+                  </svg>
+                  <span>Choropleth Provinsi</span>
+                </div>
+                <label class="toggle-switch" aria-label="Toggle choropleth">
+                  <input type="checkbox" checked data-layer="choropleth" />
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+
+              <div class="layer-toggle">
+                <div class="layer-toggle__info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  </svg>
+                  <span>Batas Provinsi</span>
+                </div>
+                <label class="toggle-switch" aria-label="Toggle batas provinsi">
+                  <input type="checkbox" checked data-layer="province-border" />
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+
+              <div class="layer-toggle">
+                <div class="layer-toggle__info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 2"/>
+                  </svg>
+                  <span>Batas Kabupaten</span>
+                </div>
+                <label class="toggle-switch" aria-label="Toggle batas kabupaten">
+                  <input type="checkbox" data-layer="district-border" />
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+
+              <div class="layer-toggle">
+                <div class="layer-toggle__info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <polygon points="12,2 15,10 9,10" fill="#EF4444"/>
+                    <rect x="10" y="10" width="4" height="6" fill="#EF4444" opacity="0.7"/>
+                  </svg>
+                  <span>Gunung Berapi Aktif</span>
+                </div>
+                <label class="toggle-switch" aria-label="Toggle gunung berapi">
+                  <input type="checkbox" checked data-layer="volcanoes" />
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- Reset Filter -->
+          <button class="btn btn--secondary btn--full" id="btn-reset-filter">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="1,4 1,10 7,10"/>
+              <path d="M3.51 15a9 9 0 105.64-12.36L1 10"/>
+            </svg>
+            Reset Filter
+          </button>
+        </div>
+      </aside>
+
+      <!-- Map Container -->
+      <main class="map-container" id="map-container">
+        <div class="map-wrapper">
+          <div id="map" class="map" role="application" aria-label="Peta interaktif bencana Indonesia"></div>
+
+          <!-- Legend Bar -->
+          <div class="legend-bar" id="legend-bar">
+            <span class="legend-bar__title">Jumlah Kejadian (15 Hari)</span>
+            <div class="legend-bar__items">
+              <div class="legend-bar__item">
+                <span class="legend-bar__color" style="background: #FED7AA;"></span>
+                <span>0 - 5</span>
+              </div>
+              <div class="legend-bar__item">
+                <span class="legend-bar__color" style="background: #FB923C;"></span>
+                <span>6 - 20</span>
+              </div>
+              <div class="legend-bar__item">
+                <span class="legend-bar__color" style="background: #EA580C;"></span>
+                <span>21 - 50</span>
+              </div>
+              <div class="legend-bar__item">
+                <span class="legend-bar__color" style="background: #DC2626;"></span>
+                <span>51 - 100</span>
+              </div>
+              <div class="legend-bar__item">
+                <span class="legend-bar__color" style="background: #991B1B;"></span>
+                <span>> 100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Stats Panel (Right Sidebar) -->
+      <aside class="stats-panel" id="stats-panel" aria-label="Ringkasan bencana">
+        <h2 class="stats-panel__title">RINGKASAN BENCANA</h2>
+
+        <!-- Total Kejadian -->
+        <div class="stats-card stats-card--total" id="stats-total">
+          <span class="stats-card__label">Total Kejadian</span>
+          <span class="stats-card__value">297</span>
+          <span class="stats-card__change stats-card__change--up">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+              <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/>
+            </svg>
+            12% dari 15 hari lalu
+          </span>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="stats-grid">
+          <div class="stats-mini stats-mini--gempa">
+            <div class="stats-mini__header">
+              <span class="stats-mini__icon">⊙</span>
+              <span class="stats-mini__label">Gempa Bumi</span>
+            </div>
+            <span class="stats-mini__value">128</span>
+            <span class="stats-mini__change stats-mini__change--up">↑ 8%</span>
+          </div>
+          <div class="stats-mini stats-mini--gunung">
+            <div class="stats-mini__header">
+              <span class="stats-mini__icon">△</span>
+              <span class="stats-mini__label">Gunung Berapi</span>
+            </div>
+            <span class="stats-mini__value">45</span>
+            <span class="stats-mini__change stats-mini__change--up">↑ 5%</span>
+          </div>
+          <div class="stats-mini stats-mini--banjir">
+            <div class="stats-mini__header">
+              <span class="stats-mini__icon">◈</span>
+              <span class="stats-mini__label">Banjir</span>
+            </div>
+            <span class="stats-mini__value">72</span>
+            <span class="stats-mini__change stats-mini__change--up">↑ 15%</span>
+          </div>
+          <div class="stats-mini stats-mini--longsor">
+            <div class="stats-mini__header">
+              <span class="stats-mini__icon">⚠</span>
+              <span class="stats-mini__label">Tanah Longsor</span>
+            </div>
+            <span class="stats-mini__value">34</span>
+            <span class="stats-mini__change stats-mini__change--down">↓ 3%</span>
+          </div>
+        </div>
+
+        <!-- Provinsi Terdampak -->
+        <div class="province-ranking" id="province-ranking">
+          <h3 class="province-ranking__title">Provinsi Terdampak Terbanyak</h3>
+          <ol class="province-ranking__list">
+            <li class="province-ranking__item">
+              <span class="province-ranking__rank">1</span>
+              <span class="province-ranking__dot" style="background: #EF4444;"></span>
+              <span class="province-ranking__name">Jawa Barat</span>
+              <span class="province-ranking__count">48</span>
+            </li>
+            <li class="province-ranking__item">
+              <span class="province-ranking__rank">2</span>
+              <span class="province-ranking__dot" style="background: #F97316;"></span>
+              <span class="province-ranking__name">Jawa Timur</span>
+              <span class="province-ranking__count">42</span>
+            </li>
+            <li class="province-ranking__item">
+              <span class="province-ranking__rank">3</span>
+              <span class="province-ranking__dot" style="background: #FB923C;"></span>
+              <span class="province-ranking__name">Sulawesi Selatan</span>
+              <span class="province-ranking__count">31</span>
+            </li>
+            <li class="province-ranking__item">
+              <span class="province-ranking__rank">4</span>
+              <span class="province-ranking__dot" style="background: #FBBF24;"></span>
+              <span class="province-ranking__name">Nusa Tenggara Timur</span>
+              <span class="province-ranking__count">28</span>
+            </li>
+            <li class="province-ranking__item">
+              <span class="province-ranking__rank">5</span>
+              <span class="province-ranking__dot" style="background: #34D399;"></span>
+              <span class="province-ranking__name">Sumatera Barat</span>
+              <span class="province-ranking__count">22</span>
+            </li>
+          </ol>
+          <button class="btn btn--ghost btn--full btn--sm" id="btn-show-all-provinces">
+            Lihat Selengkapnya
+          </button>
+        </div>
+
+        <!-- Trend Chart -->
+        <div class="trend-chart" id="trend-chart">
+          <h3 class="trend-chart__title">Trend Kejadian (15 Hari)</h3>
+          <div class="trend-chart__canvas" id="trend-chart-canvas">
+            <!-- SVG chart will be rendered by JS -->
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  </div>
+</body>
+</html>
