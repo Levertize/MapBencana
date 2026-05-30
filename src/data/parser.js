@@ -4,7 +4,7 @@
  */
 
 // Daftar nama provinsi resmi Indonesia
-const PROVINCES = [
+export const PROVINCES = [
   'Aceh',
   'Sumatera Utara',
   'Sumatera Barat',

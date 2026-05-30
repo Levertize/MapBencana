@@ -4,6 +4,7 @@
  */
 
 import { formatNumber } from '../utils/formatter.js';
+import { zoomToProvince } from '../map/choropleth.js';
 
 /**
  * Data dummy statistik (akan diganti dengan data real di phase berikutnya)
@@ -303,13 +304,18 @@ const animateNumber = (element, target, duration = 800) => {
  */
 const initStatsInteractions = () => {
   // Mini card hover effects (sudah di CSS)
-  // Province item click → fly to province
-  const provinceItems = document.querySelectorAll('.province-ranking__item');
-  provinceItems.forEach((item) => {
-    item.addEventListener('click', () => {
-      const name = item.querySelector('.province-ranking__name')?.textContent;
-      // TODO: Fly to province saat GeoJSON sudah tersedia
-      console.warn(`[statsPanel] Province click: ${name} — fly to belum diimplementasi`);
+  // Province item click → fly to province (menggunakan event delegation)
+  const rankingList = document.querySelector('.province-ranking__list');
+  if (rankingList) {
+    rankingList.addEventListener('click', (e) => {
+      const item = e.target.closest('.province-ranking__item');
+      if (item) {
+        const name = item.querySelector('.province-ranking__name')?.textContent;
+        if (name) {
+          console.log(`[statsPanel] Province click: ${name} — zoom to province bounds`);
+          zoomToProvince(name);
+        }
+      }
     });
-  });
+  }
 };
