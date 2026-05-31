@@ -975,8 +975,9 @@
 
 .alert-card {
   padding: var(--space-4);
-  border-radius: var(--radius-xl);
+  background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -984,22 +985,8 @@
 }
 
 .alert-card:hover {
-  box-shadow: var(--shadow-lg);
-}
-
-.alert-card--gempa {
-  background: rgba(239, 68, 68, 0.05);
-  border-left: 4px solid var(--color-danger);
-}
-
-.alert-card--siaga {
-  background: rgba(249, 115, 22, 0.05);
-  border-left: 4px solid var(--color-gunung);
-}
-
-.alert-card--awas {
-  background: rgba(239, 68, 68, 0.05);
-  border-left: 4px solid var(--color-danger);
+  border-color: var(--border-color-hover);
+  box-shadow: var(--shadow-md);
 }
 
 .alert-card__header {
@@ -1012,19 +999,7 @@
   font-size: 9px;
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.05em;
-  color: var(--text-secondary);
-}
-
-.alert-card--gempa .alert-card__badge {
-  color: var(--color-danger);
-}
-
-.alert-card--siaga .alert-card__badge {
-  color: var(--color-gunung);
-}
-
-.alert-card--awas .alert-card__badge {
-  color: var(--color-danger);
+  color: var(--text-disabled);
 }
 
 .alert-card__time, .alert-card__province {

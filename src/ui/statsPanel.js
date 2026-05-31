@@ -257,7 +257,7 @@ const renderAlertsList = () => {
     });
 
     html += `
-      <div class="alert-card alert-card--gempa">
+      <div class="alert-card">
         <div class="alert-card__header">
           <span class="alert-card__badge">GEMPA BUMI M5.0+</span>
           <span class="alert-card__time">${dateStr} WIB</span>
@@ -275,9 +275,8 @@ const renderAlertsList = () => {
   });
 
   volcanoAlerts.forEach((v) => {
-    const statusClass = v.status === 'Awas' ? 'alert-card--awas' : 'alert-card--siaga';
     html += `
-      <div class="alert-card ${statusClass}">
+      <div class="alert-card">
         <div class="alert-card__header">
           <span class="alert-card__badge">GUNUNG BERAPI (${v.status.toUpperCase()})</span>
           <span class="alert-card__province">${v.province}</span>

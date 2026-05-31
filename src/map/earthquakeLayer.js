@@ -112,12 +112,53 @@ export const updateEarthquakeMarkers = (activeTypes, timeRange) => {
     const magConfig = getMagnitudeConfig(gempa.magnitude);
     const color = magConfig.color;
     const r = magConfig.radius;
-    const size = (r * 2) + 24; // Ruang ekstra untuk animasi pulse
+    const size = (r * 2) + 24; // Ruang dasar marker
 
-    // Animasi pulse wave jika termasuk 3 gempa terbaru
-    const pulseHtml = isPulse
-      ? `<span class="earthquake-pulse" style="width: ${size}px; height: ${size}px; border-color: ${color}; color: ${color};"></span>`
-      : '';
+    // Logika denyut dinamis berdasarkan tingkat bahaya (magnitudo)
+    let pulseHtml = '';
+    const mag = gempa.magnitude;
+    let pulseCount = 0;
+    let pulseSizeMultiplier = 1.0;
+    let pulseSpeed = '2.5s';
+
+    if (mag >= 7.0) {
+      pulseCount = 3;
+      pulseSizeMultiplier = 3.0; // Area terdampak sangat luas
+      pulseSpeed = '1.5s';       // Denyut sangat cepat
+    } else if (mag >= 6.0) {
+      pulseCount = 2;
+      pulseSizeMultiplier = 2.2; // Area terdampak luas
+      pulseSpeed = '1.8s';       // Denyut cepat
+    } else if (mag >= 5.0) {
+      pulseCount = 2;
+      pulseSizeMultiplier = 1.6; // Area terdampak sedang-tinggi
+      pulseSpeed = '2.2s';
+    } else if (mag >= 4.0) {
+      pulseCount = 1;
+      pulseSizeMultiplier = 1.2; // Area terdampak sedang
+      pulseSpeed = '2.8s';       // Denyut lambat
+    } else if (isPulse) {
+      // 3 gempa teranyar nasional tetap berdenyut meskipun magnitudo rendah
+      pulseCount = 1;
+      pulseSizeMultiplier = 1.0;
+      pulseSpeed = '2.5s';
+    }
+
+    // Render multi-ring dengan delay berbeda
+    for (let i = 0; i < pulseCount; i++) {
+      const delay = (i * 0.6).toFixed(1);
+      const pulseSize = size * pulseSizeMultiplier;
+      pulseHtml += `
+        <span class="earthquake-pulse" style="
+          width: ${pulseSize}px;
+          height: ${pulseSize}px;
+          border-color: ${color};
+          color: ${color};
+          animation-delay: ${delay}s;
+          animation-duration: ${pulseSpeed};
+        "></span>
+      `;
+    }
 
     const markerHtml = `
       <div class="earthquake-marker-wrapper" style="width: ${size}px; height: ${size}px; color: ${color};">

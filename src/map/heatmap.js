@@ -30,12 +30,11 @@ export const initHeatmapLayer = (earthquakeData) => {
     maxZoom: 10,
     minOpacity: 0.3,
     gradient: {
-      0.4: '#3B82F6', // Blue
-      0.6: '#06B6D4', // Cyan
-      0.7: '#10B981', // Emerald
-      0.8: '#FBBF24', // Yellow
-      0.9: '#F97316', // Orange
-      1.0: '#EF4444', // Red
+      0.4: '#10B981', // Emerald Green (Risiko Rendah)
+      0.6: '#84CC16', // Lime (Risiko Sedang-Rendah)
+      0.75: '#FBBF24', // Amber/Yellow (Risiko Sedang)
+      0.9: '#F97316', // Orange (Risiko Tinggi)
+      1.0: '#EF4444', // Red (Risiko Sangat Tinggi)
     },
   });
 
