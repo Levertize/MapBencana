@@ -1,4 +1,4 @@
-# 🗺️ MapBencana — Peta Interaktif Rawan Bencana Indonesia
+# MapBencana — Peta Interaktif Rawan Bencana Indonesia
 
 [![Vite Build Status](https://img.shields.io/badge/Vite-Built-646CFF?logo=vite&style=flat-square)](https://vitejs.dev/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-4A8F29?logo=leaflet&style=flat-square)](https://leafletjs.com/)
@@ -7,27 +7,27 @@
 
 Aplikasi pemetaan data interaktif berbasis web yang menampilkan titik-titik rawan bencana di Indonesia secara real-time maupun historis. Pengguna dapat memfilter jenis bencana, melihat statistik wilayah, dan mengeksplorasi data secara visual di atas peta interaktif.
 
-🔗 **Live Demo:** [https://levertize.github.io/MapBencana/](https://levertize.github.io/MapBencana/)
+**Live Demo:** [https://levertize.github.io/MapBencana/](https://levertize.github.io/MapBencana/)
 
 ---
 
-## ✨ Fitur Utama
+## Fitur Utama
 
-- **🔴 Base Map & Peta Interaktif:** Tampilan dasar Indonesia dengan mode terang/gelap serta basemap satelit.
-- **🌋 Layer Gunung Berapi Aktif:** Deteksi lokasi gunung berapi aktif di Indonesia dengan marker segitiga visual kustom yang mencerminkan level aktivitas ("Normal", "Waspada", "Siaga", "Awas").
-- **🎨 Visualisasi Choropleth Provinsi:** Batas wilayah provinsi diwarnai secara dinamis berdasarkan total frekuensi kejadian bencana untuk mendeteksi area paling rawan.
-- **🔥 Heatmap Kepadatan & Efek Glowing:** Visualisasi area titik api/konsentrasi bencana yang padat menggunakan modulasi denyut animasi halus pada canvas heatmap tanpa warna biru/sian.
-- **🌊 Animasi Gelombang Terdampak (Seismic Shockwaves):** Marker gempa bumi memancarkan denyut gelombang kejut konsentris melingkar. Ukuran radius, jumlah ring, dan kecepatan gelombang berubah secara dinamis sesuai skala magnitudo gempa.
-- **🔍 Pencarian Lokasi & Fly-To:** Memungkinkan pencarian lokasi (provinsi, kabupaten, kota) secara instan dengan efek luncur (*fly-to*) di peta.
-- **📊 Panel Statistik Dinamis & Sparkline:** 
+- **Base Map & Peta Interaktif:** Tampilan dasar Indonesia dengan mode terang/gelap serta basemap satelit.
+- **Layer Gunung Berapi Aktif:** Deteksi lokasi gunung berapi aktif di Indonesia dengan marker segitiga visual kustom yang mencerminkan level aktivitas ("Normal", "Waspada", "Siaga", "Awas").
+- **Visualisasi Choropleth Provinsi:** Batas wilayah provinsi diwarnai secara dinamis berdasarkan total frekuensi kejadian bencana untuk mendeteksi area paling rawan.
+- **Heatmap Kepadatan & Efek Glowing:** Visualisasi area titik api/konsentrasi bencana yang padat menggunakan modulasi denyut animasi halus pada canvas heatmap tanpa warna biru/sian.
+- **Animasi Gelombang Terdampak (Seismic Shockwaves):** Marker gempa bumi memancarkan denyut gelombang kejut konsentris melingkar. Ukuran radius, jumlah ring, dan kecepatan gelombang berubah secara dinamis sesuai skala magnitudo gempa.
+- **Pencarian Lokasi & Fly-To:** Memungkinkan pencarian lokasi (provinsi, kabupaten, kota) secara instan dengan efek luncur (*fly-to*) di peta.
+- **Panel Statistik Dinamis & Sparkline:** 
   - Grafik tren magnitudo kejadian historis 15 hari terakhir.
   - Sparkline total kejadian interaktif.
   - Perhitungan data statistik riil secara dinamis berdasarkan penyaringan aktif.
-- **⚡ Responsive Layout & Mode Khusus:** Layout desktop memisahkan panel filter (kiri) dan panel statistik (kanan) secara bersih agar navigasi terasa lapang dan terfokus. Dukungan penuh untuk perangkat seluler.
+- **Responsive Layout & Mode Khusus:** Layout desktop memisahkan panel filter (kiri) dan panel statistik (kanan) secara bersih agar navigasi terasa lapang dan terfokus. Dukungan penuh untuk perangkat seluler.
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 | Layer | Teknologi | Deskripsi |
 | --- | --- | --- |
@@ -40,7 +40,7 @@ Aplikasi pemetaan data interaktif berbasis web yang menampilkan titik-titik rawa
 
 ---
 
-## 🌐 Sumber Data Riil
+## Sumber Data Riil
 
 - **Gempa Bumi Real-time:** [BMKG autogempa.json](https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json)
 - **Gempa Bumi 15 Hari Terakhir:** [BMKG gempaterkini.json](https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json)
@@ -49,7 +49,7 @@ Aplikasi pemetaan data interaktif berbasis web yang menampilkan titik-titik rawa
 
 ---
 
-## 🗂️ Struktur Folder
+## Struktur Folder
 
 ```
 mapbencana/
@@ -93,7 +93,7 @@ mapbencana/
 
 ---
 
-## 🚀 Instalasi & Pengembangan Lokal
+## Instalasi & Pengembangan Lokal
 
 ### Prasyarat
 Pastikan Anda telah menginstal [Node.js](https://nodejs.org/) (versi 18 atau lebih baru).
@@ -116,7 +116,7 @@ npm run build
 
 ---
 
-## 🌐 Panduan Deployment ke GitHub Pages
+## Panduan Deployment ke GitHub Pages
 
 Proyek ini telah dikonfigurasi untuk dapat di-deploy ke GitHub Pages dengan dua metode:
 
@@ -132,5 +132,5 @@ Perintah ini akan secara otomatis mem-build proyek ke folder `dist` dan mengungg
 
 ---
 
-## 📜 Lisensi
+## Lisensi
 Proyek ini dilisensikan di bawah lisensi MIT. Lihat [LICENSE](LICENSE) jika tersedia untuk detail selengkapnya. Data yang digunakan merupakan hak cipta publik milik BMKG dan institusi terkait.
