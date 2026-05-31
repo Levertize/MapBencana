@@ -80,24 +80,13 @@ const fetchVolcanoes = async () => {
  * Menampilkan skeleton shimmer loader di panel Ringkasan
  */
 export const showStatsLoading = () => {
-  const container = document.getElementById('view-ringkasan');
-  if (!container) {
-    return;
-  }
+  const content = document.getElementById('ringkasan-content');
+  const skeleton = document.getElementById('ringkasan-skeleton');
+  const error = document.getElementById('ringkasan-error');
 
-  container.innerHTML = `
-    <div class="skeleton-wrapper">
-      <div class="skeleton-card skeleton-card--total shimmer"></div>
-      <div class="skeleton-grid">
-        <div class="skeleton-mini shimmer"></div>
-        <div class="skeleton-mini shimmer"></div>
-        <div class="skeleton-mini shimmer"></div>
-        <div class="skeleton-mini shimmer"></div>
-      </div>
-      <div class="skeleton-list shimmer"></div>
-      <div class="skeleton-chart shimmer"></div>
-    </div>
-  `;
+  content?.classList.add('hidden');
+  error?.classList.add('hidden');
+  skeleton?.classList.remove('hidden');
 };
 
 /**
@@ -105,26 +94,19 @@ export const showStatsLoading = () => {
  * @param {Function} onRetry - Callback fungsi saat tombol ditekan
  */
 export const showStatsError = (onRetry) => {
-  const container = document.getElementById('view-ringkasan');
-  if (!container) {
-    return;
-  }
+  const content = document.getElementById('ringkasan-content');
+  const skeleton = document.getElementById('ringkasan-skeleton');
+  const error = document.getElementById('ringkasan-error');
 
-  container.innerHTML = `
-    <div class="error-state">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-      </svg>
-      <p class="error-state__msg">Gagal memuat data statistik.</p>
-      <button class="btn btn--primary btn--sm" id="btn-retry-stats">
-        Coba Lagi
-      </button>
-    </div>
-  `;
+  content?.classList.add('hidden');
+  skeleton?.classList.add('hidden');
+  error?.classList.remove('hidden');
 
   const btnRetry = document.getElementById('btn-retry-stats');
   if (btnRetry && typeof onRetry === 'function') {
-    btnRetry.addEventListener('click', onRetry);
+    const newBtn = btnRetry.cloneNode(true);
+    btnRetry.parentNode.replaceChild(newBtn, btnRetry);
+    newBtn.addEventListener('click', onRetry);
   }
 };
 
@@ -408,6 +390,15 @@ const initSettings = () => {
  * @param {object} data - Data statistik
  */
 export const updateStats = (data) => {
+  // Sembunyikan loading dan error, tampilkan konten utama
+  const content = document.getElementById('ringkasan-content');
+  const skeleton = document.getElementById('ringkasan-skeleton');
+  const error = document.getElementById('ringkasan-error');
+
+  skeleton?.classList.add('hidden');
+  error?.classList.add('hidden');
+  content?.classList.remove('hidden');
+
   // Update total
   const totalValue = document.querySelector('#stats-total .stats-card__value');
   if (totalValue) {

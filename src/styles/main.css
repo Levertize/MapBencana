@@ -347,6 +347,10 @@ ul, ol {
   border-width: 0;
 }
 
+.hidden {
+  display: none !important;
+}
+
 /* ---- Animations ---- */
 @keyframes fade-in {
   from { opacity: 0; }

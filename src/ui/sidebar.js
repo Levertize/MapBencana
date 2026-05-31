@@ -309,7 +309,7 @@ const initResizeHandler = () => {
         statsPanel?.classList.remove('hidden');
       } else {
         filterPanel?.classList.add('hidden');
-        statsPanel?.classList.add('hidden');
+        statsPanel?.classList.remove('hidden');
       }
     } else {
       filterPanel?.classList.remove('hidden');
