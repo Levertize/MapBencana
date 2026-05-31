@@ -894,58 +894,85 @@
 .history-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2-5);
 }
 
 .history-item {
-  padding: var(--space-3);
+  padding: var(--space-3) var(--space-3-5);
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
   transition: all var(--transition-fast);
 }
 
-.history-item:hover {
+.history-item--clickable {
+  cursor: pointer;
+}
+
+.history-item--clickable:hover {
+  background: var(--bg-elevated);
   border-color: var(--border-color-hover);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+}
+
+.history-item--clickable:hover .history-item__nav-icon {
+  color: var(--color-primary);
+  transform: scale(1.1) translate(1px, -1px);
 }
 
 .history-item__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-2);
 }
 
 .history-item__mag {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   padding: 2px 6px;
   border-radius: var(--radius-sm);
+  color: white;
+}
+
+.mag-disaster {
+  background: var(--choropleth-5); /* Merah Tua */
 }
 
 .mag-high {
-  background: var(--color-danger-light);
-  color: var(--color-danger);
+  background: var(--color-danger); /* Merah Terang */
 }
 
-.mag-low {
-  background: var(--color-success-light);
-  color: var(--color-success);
+.mag-medium {
+  background: var(--color-warning); /* Kuning / Amber */
+}
+
+.mag-light {
+  background: var(--color-success); /* Hijau */
 }
 
 .history-item__time {
   font-size: var(--font-size-xs);
   color: var(--text-secondary);
+  flex: 1;
+}
+
+.history-item__nav-icon {
+  color: var(--text-disabled);
+  display: flex;
+  align-items: center;
+  transition: all var(--transition-fast);
 }
 
 .history-item__location {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
-  line-height: var(--line-height-normal);
+  line-height: 1.4;
 }
 
 .history-item__details {
@@ -953,6 +980,13 @@
   justify-content: space-between;
   font-size: var(--font-size-xs);
   color: var(--text-secondary);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: var(--space-2);
+  margin-top: 2px;
+}
+
+.history-item__depth strong {
+  color: var(--text-primary);
 }
 
 /* ---- Peringatan / Alerts Page ---- */

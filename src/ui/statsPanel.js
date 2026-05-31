@@ -171,42 +171,46 @@ const renderHistoryList = () => {
 
   container.innerHTML = latest15
     .map((eq) => {
-      const magnitude = Number(eq.magnitude).toFixed(1);
-      const magClass = eq.magnitude >= 5.0 ? 'mag-high' : 'mag-low';
+      const mag = parseFloat(eq.magnitude);
+      const magnitudeFormated = mag.toFixed(1);
+      
+      // Warna teks magnitudo minimalis
+      let colorClass = 'text-success'; // M < 4.0
+      if (mag >= 6.0) {
+        colorClass = 'text-danger-dark'; // M >= 6.0
+      } else if (mag >= 5.0) {
+        colorClass = 'text-danger'; // M 5.0 - 5.9
+      } else if (mag >= 4.0) {
+        colorClass = 'text-warning'; // M 4.0 - 4.9
+      }
+
       const dateStr = new Date(eq.time).toLocaleString('id-ID', {
         day: 'numeric',
         month: 'short',
-        year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
       });
 
       return `
-        <div class="history-item">
-          <div class="history-item__header">
-            <span class="history-item__mag ${magClass}">M ${magnitude}</span>
-            <span class="history-item__time">${dateStr} WIB</span>
+        <div class="history-row" data-lat="${eq.lat}" data-lng="${eq.lng}">
+          <div class="history-row__mag ${colorClass}">${magnitudeFormated}</div>
+          <div class="history-row__body">
+            <div class="history-row__location">${eq.location}</div>
+            <div class="history-row__time">${dateStr} WIB</div>
           </div>
-          <div class="history-item__location">${eq.location}</div>
-          <div class="history-item__details">
-            <span class="history-item__depth">Kedalaman: ${eq.depth} km</span>
-            <span class="history-item__coords">${Number(eq.lat).toFixed(3)}, ${Number(eq.lng).toFixed(3)}</span>
+          <div class="history-row__right">
+            <span class="history-row__depth">${eq.depth} km</span>
           </div>
-          <button class="btn btn--ghost btn--sm btn--full history-item__btn-fly" data-lat="${eq.lat}" data-lng="${eq.lng}">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
-              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-            </svg>
-            Fokus Lokasi
-          </button>
         </div>
       `;
     })
     .join('');
 
-  container.querySelectorAll('.history-item__btn-fly').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const lat = parseFloat(btn.dataset.lat);
-      const lng = parseFloat(btn.dataset.lng);
+  // Event listener klik pada baris
+  container.querySelectorAll('.history-row').forEach((row) => {
+    row.addEventListener('click', () => {
+      const lat = parseFloat(row.dataset.lat);
+      const lng = parseFloat(row.dataset.lng);
       flyToLocation(lat, lng, 9);
     });
   });
