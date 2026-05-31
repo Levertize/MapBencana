@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Gunung Merapi",
+    "province": "Jawa Tengah / DI Yogyakarta",
+    "lat": -7.541,
+    "lng": 110.446,
+    "elevation": 2930,
+    "status": "Siaga",
+    "lastEruption": "2021",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Semeru",
+    "province": "Jawa Timur",
+    "lat": -8.108,
+    "lng": 112.922,
+    "elevation": 3676,
+    "status": "Waspada",
+    "lastEruption": "2023",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Agung",
+    "province": "Bali",
+    "lat": -8.343,
+    "lng": 115.508,
+    "elevation": 3142,
+    "status": "Normal",
+    "lastEruption": "2019",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Sinabung",
+    "province": "Sumatera Utara",
+    "lat": 3.170,
+    "lng": 98.392,
+    "elevation": 2460,
+    "status": "Waspada",
+    "lastEruption": "2021",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Krakatau (Anak)",
+    "province": "Lampung / Banten",
+    "lat": -6.102,
+    "lng": 105.423,
+    "elevation": 155,
+    "status": "Waspada",
+    "lastEruption": "2023",
+    "type": "Caldera"
+  },
+  {
+    "name": "Gunung Bromo",
+    "province": "Jawa Timur",
+    "lat": -7.942,
+    "lng": 112.950,
+    "elevation": 2329,
+    "status": "Normal",
+    "lastEruption": "2019",
+    "type": "Caldera"
+  },
+  {
+    "name": "Gunung Kelud",
+    "province": "Jawa Timur",
+    "lat": -7.930,
+    "lng": 112.308,
+    "elevation": 1731,
+    "status": "Normal",
+    "lastEruption": "2014",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Rinjani",
+    "province": "Nusa Tenggara Barat",
+    "lat": -8.411,
+    "lng": 116.457,
+    "elevation": 3726,
+    "status": "Waspada",
+    "lastEruption": "2016",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Dukono",
+    "province": "Maluku Utara",
+    "lat": 1.693,
+    "lng": 127.894,
+    "elevation": 1229,
+    "status": "Siaga",
+    "lastEruption": "2024",
+    "type": "Complex"
+  },
+  {
+    "name": "Gunung Lewotobi",
+    "province": "Nusa Tenggara Timur",
+    "lat": -8.542,
+    "lng": 122.775,
+    "elevation": 1703,
+    "status": "Siaga",
+    "lastEruption": "2024",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Ibu",
+    "province": "Maluku Utara",
+    "lat": 1.488,
+    "lng": 127.630,
+    "elevation": 1325,
+    "status": "Siaga",
+    "lastEruption": "2024",
+    "type": "Stratovolcano"
+  },
+  {
+    "name": "Gunung Marapi",
+    "province": "Sumatera Barat",
+    "lat": -0.381,
+    "lng": 100.474,
+    "elevation": 2891,
+    "status": "Waspada",
+    "lastEruption": "2024",
+    "type": "Complex"
+  }
+]
