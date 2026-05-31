@@ -9,7 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src/**/*.js",
-    "format": "prettier --write src/**/*.{js,css}"
+    "format": "prettier --write src/**/*.{js,css}",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "d3": "^7.9.0",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "eslint": "^8.57.0",
+    "gh-pages": "^6.1.1",
     "prettier": "^3.3.0",
     "vite": "^5.4.0"
   }
