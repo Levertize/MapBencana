@@ -119,8 +119,7 @@ const handleViewSwitch = (view) => {
     setActiveNavItem(view);
     if (view === 'peta') {
       filterPanel?.classList.remove('hidden');
-      statsPanel?.classList.remove('hidden');
-      switchRightPanelView('statistik');
+      statsPanel?.classList.add('hidden');
     } else {
       filterPanel?.classList.add('hidden');
       statsPanel?.classList.remove('hidden');
@@ -306,7 +305,7 @@ const initResizeHandler = () => {
 
       if (activeView === 'peta') {
         filterPanel?.classList.remove('hidden');
-        statsPanel?.classList.remove('hidden');
+        statsPanel?.classList.add('hidden');
       } else {
         filterPanel?.classList.add('hidden');
         statsPanel?.classList.remove('hidden');
